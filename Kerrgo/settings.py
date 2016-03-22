@@ -137,6 +137,9 @@ INSTALLED_APPS = [
     "metron",
     "pinax.eventlog",
 
+    #my App
+    "userprofile",
+
     # project
     "Kerrgo",
 ]
