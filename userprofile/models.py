@@ -16,6 +16,11 @@ class bizCategory(models.Model):
 	def __unicode__(self):
 		return self.category
 
+class bizGoal(models.Model):
+	goal = models.CharField(max_length=250,unique=True)
+	def __unicode__(self):
+		return self.goal
+
 class Profile(models.Model):
 	user = models.OneToOneField(User,related_name='myprofile')
 	fullname = models.CharField(max_length=100,null=True,blank=True)
@@ -24,6 +29,7 @@ class Profile(models.Model):
 	#logo = models.ImageField(upload_to='profile_images',blank=True)
 	role = models.ForeignKey(UserRole)
 	category = models.ManyToManyField(bizCategory)
+	goal = models.ForeignKey(bizGoal,blank=True, null=True) #For company Only
 	# Location
 	country = models.CharField(max_length=100,null=True,blank=True)
 	state = models.CharField(max_length=100,null=True,blank=True)
@@ -70,7 +76,7 @@ class fundingType(models.Model):
 	def __unicode__(self):
 		return self.fType
 
-class CompanyProfile(models.Model):
+class CompanyProfile_seekFund(models.Model):
 	company = models.ForeignKey(User)
 	shortDescription = models.TextField(default=" ",null=True,blank=True,max_length=200)
 	priorRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
@@ -85,6 +91,26 @@ class CompanyProfile(models.Model):
 	preMoney = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	interest = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 
+class CompanyProfile_sale(models.Model):
+	company = models.ForeignKey(User)
+	shortDescription = models.TextField(default=" ",null=True,blank=True,max_length=200)
+	sales = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	profit = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	fiscalYear = models.FloatField(default=0,null=True,blank=True)
+	employees = models.IntegerField(default=0,null=True,blank=True)
+	price = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	answerChoice = (
+		('Y','Yes'),
+		('N', 'No'),
+		('ND', 'Not Disclosed'),
+		)
+	provideFinancing = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	pricipalsOnly = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	isFranchise = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	manageStay = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	relocatable = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	realEstateInclude = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	
 
 
 
