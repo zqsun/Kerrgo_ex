@@ -1,0 +1,16 @@
+[
+    {
+        "pk": 1,
+        "model": "userprofile.bizGoal",
+        "fields": {
+            "goal": "Look for Funding"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "userprofile.bizGoal",
+        "fields": {
+            "goal": "Company for Sale"
+        }
+    }
+]

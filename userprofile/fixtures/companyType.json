@@ -1,0 +1,16 @@
+[
+    {
+        "pk": 1,
+        "model": "userprofile.companyType",
+        "fields": {
+            "cType": "Privately-Held"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "userprofile.companyType",
+        "fields": {
+            "cType": "Publicly-Traded"
+        }
+    }
+]

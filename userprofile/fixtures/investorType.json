@@ -1,0 +1,44 @@
+[
+    {
+        "pk": 1,
+        "model": "userprofile.investorType",
+        "fields": {
+            "iType": "Angel Group"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "userprofile.investorType",
+        "fields": {
+            "iType": "Debt Provider"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "userprofile.investorType",
+        "fields": {
+            "iType": "Government Funding Source"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "userprofile.investorType",
+        "fields": {
+            "iType": "Individual Investor"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "userprofile.investorType",
+        "fields": {
+            "iType": "Non-Profit Funding Source"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "userprofile.investorType",
+        "fields": {
+            "iType": "Venture Capital Fund"
+        }
+    }
+]

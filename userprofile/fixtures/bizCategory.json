@@ -1,0 +1,58 @@
+[
+    {
+        "pk": 1,
+        "model": "userprofile.bizCategory",
+        "fields": {
+            "category": "Bio Science"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "userprofile.bizCategory",
+        "fields": {
+            "category": "Medical Devices"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "userprofile.bizCategory",
+        "fields": {
+            "category": "Health Care"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "userprofile.bizCategory",
+        "fields": {
+            "category": "Agriculture"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "userprofile.bizCategory",
+        "fields": {
+            "category": "Green Energy"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "userprofile.bizCategory",
+        "fields": {
+            "category": "Entertainment"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "userprofile.bizCategory",
+        "fields": {
+            "category": "Aviation"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "userprofile.bizCategory",
+        "fields": {
+            "category": "Manufacturing"
+        }
+    }
+]
