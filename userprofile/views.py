@@ -5,7 +5,7 @@ from userprofile.forms import SignupForm
 
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-from userprofile.models import Profile,UserRole
+from userprofile.models import Profile,UserRole,InvestorProfile
 
 from django.contrib.auth.models import User
 
@@ -29,4 +29,8 @@ class SignupView(account.views.SignupView):
 		profile.fullname = form.cleaned_data["fullname"]
 		profile.role = form.cleaned_data["role"]
 		# profile.role = UserRole.objects.get(pk=form.cleaned_data["role"])
+		if profile.role == UserRole.objects.get(pk=2):
+			InvestorProfile.objects.create(investor=profile.user)
 		profile.save()
+
+
