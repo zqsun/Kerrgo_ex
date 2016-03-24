@@ -28,3 +28,48 @@
     {% analytics %}
     {% block extra_body %}{% endblock %}
 {% endblock %}
+
+{% block topbar_base %}
+<header>
+	<div class="navbar navbar-inverse {% block navbar_class %}navbar-fixed-top{% endblock %}">
+		<div class="container">
+			{% block topbar %}
+			<div class="navbar-header">
+				<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="fa fa-bars"></span>
+				</button>
+				{% block site_brand %}<a class="navbar-brand" href="{% url "home" %}">{{ SITE_NAME }}</a>{% endblock %}
+			</div>
+			<div class="collapse navbar-collapse navbar-responsive-collapse">
+				{% block nav %}
+				<ul class="nav navbar-nav">
+					<li class="dropdown">
+					  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Companies<span class="caret"></span></a>
+					  <ul class="dropdown-menu">
+					  	<li><a href="#">Seek Investor</a></li>
+					  	<li><a href="#">Sell Company</a></li>
+					  </ul>
+					</li>
+					<li class="dropdown">
+					  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Investors<span class="caret"></span></a>
+					  <ul class="dropdown-menu">
+					  	<li><a href="#">Angel Group</a></li>
+					  	<li><a href="#">Debt Provider</a></li>
+					  	<li><a href="#">Government Funding Source</a></li>
+					  	<li><a href="#">Individual Investor</a></li>
+					  	<li><a href="#">Non-Profit Funding Source</a></li>
+					  	<li><a href="#">Venture Capital Fund</a></li>
+					  </ul>
+					</li>
+				</ul>
+				{% endblock %}
+				{% block account_bar %}{% include "_account_bar.html" %}{% endblock %}
+			</div>
+			{% endblock %}
+
+		</div>
+		{% block nav_sidebar %}{% endblock %}
+	</div>
+</header>
+{% endblock %}
+
