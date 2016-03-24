@@ -34,6 +34,7 @@ class Profile(models.Model):
 	country = models.CharField(max_length=100,null=True,blank=True)
 	state = models.CharField(max_length=100,null=True,blank=True)
 	description = models.TextField(default=" ",null=True,blank=True)
+	created_at = models.DateTimeField(auto_now_add=True)
 	# address = models.CharField(max_length=150)
 	def __unicode__(self):
 		return self.user
