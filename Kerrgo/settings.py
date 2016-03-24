@@ -139,6 +139,7 @@ INSTALLED_APPS = [
 
     #my App
     "userprofile",
+    "mainsite",
 
     # project
     "Kerrgo",
