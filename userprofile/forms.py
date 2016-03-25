@@ -1,5 +1,5 @@
 from django import forms
-from userprofile.models import Profile,UserRole
+from userprofile.models import *
 import account.forms
 
 class SignupForm(account.forms.SignupForm):
@@ -12,4 +12,22 @@ class SignupForm(account.forms.SignupForm):
 class ProfileForm(forms.ModelForm):
 	class Meta:
 		model = Profile
-		fields = ['fullname','role','category','country','state','description']
+		fields = ['fullname','role','goal','category','country','state','description']
+
+class GoalForm(forms.ModelForm):
+	class Meta:
+		model = Profile
+		fields = ['goal']
+
+class cpSeekFundForm(forms.ModelForm):
+	class Meta:
+		model = CompanyProfile_seekFund
+		fields = ['shortDescription','priorRevenue','curRevenue','nextRevenue','companyAge',
+		'employees', 'cType','productName','productDescription','fType','preMoney','interest']
+
+class cpSaleForm(forms.ModelForm):
+	class Meta:
+		model = CompanyProfile_sale
+		fields = ['shortDescription','sales','profit','fiscalYear','employees',
+		'price', 'provideFinancing','pricipalsOnly','isFranchise','manageStay','relocatable','realEstateInclude']
+			
