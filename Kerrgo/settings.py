@@ -136,6 +136,7 @@ INSTALLED_APPS = [
     "account",
     "metron",
     "pinax.eventlog",
+    "widget_tweaks",
 
     #my App
     "userprofile",
