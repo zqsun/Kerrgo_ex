@@ -195,3 +195,7 @@ ACCOUNT_USE_AUTH_AUTHENTICATE = True
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
 ]
+
+# Postman settings
+POSTMAN_DISABLE_USER_EMAILING = True
+POSTMAN_AUTO_MODERATE_AS = True
