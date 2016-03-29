@@ -23,7 +23,7 @@ class bizGoal(models.Model):
 
 class Profile(models.Model):
 	user = models.OneToOneField(User,related_name='myprofile')
-	fullname = models.CharField(max_length=100,null=True,blank=True)
+	fullname = models.CharField(max_length=100)
 	#company = models.CharField(max_length=150,null=True,blank=True)
 	#description = models.TextField(default=" ",null=True,blank=True)
 	#logo = models.ImageField(upload_to='profile_images',blank=True)
@@ -60,7 +60,10 @@ class InvestorProfile(models.Model):
 	preMoney_min = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	preMoney_max = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	expectedReturn = models.DecimalField(default=0,max_digits=4,decimal_places=2,null=True,blank=True)
-	investAmount = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	revenueStage_min = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	revenueStage_max = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	investAmount_min = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	investAmount_max = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	def __unicode__(self):
 		return self.user
 
@@ -86,10 +89,10 @@ class CompanyProfile_seekFund(models.Model):
 	nextRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	companyAge = models.FloatField(default=0)
 	employees = models.IntegerField(default=0,null=True,blank=True)
-	cType = models.ForeignKey(companyType)
+	cType = models.ForeignKey(companyType,null=True,blank=True)
 	productName = models.CharField(null=True,blank=True,max_length=250)
 	productDescription = models.TextField(default=" ",null=True,blank=True)
-	fType = models.ForeignKey(fundingType)
+	fType = models.ForeignKey(fundingType,null=True,blank=True)
 	preMoney = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	interest = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 
