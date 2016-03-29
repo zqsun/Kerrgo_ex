@@ -10,6 +10,7 @@ class SignupForm(account.forms.SignupForm):
 	# role = forms.ChoiceField(choices=roleChoice)
 
 class ProfileForm(forms.ModelForm):
+	category = forms.ModelMultipleChoiceField(queryset=bizCategory.objects.all(),widget=forms.CheckboxSelectMultiple(),required=True)
 	class Meta:
 		model = Profile
 		fields = ['fullname','role','goal','category','country','state','description']
@@ -18,6 +19,12 @@ class GoalForm(forms.ModelForm):
 	class Meta:
 		model = Profile
 		fields = ['goal']
+
+class InvestorForm(forms.ModelForm):
+	class Meta:
+		model = InvestorProfile
+		fields = ['iType','capital','preMoney_min','preMoney_max','expectedReturn','revenueStage_min','revenueStage_max','investAmount_min','investAmount_max']
+		
 
 class cpSeekFundForm(forms.ModelForm):
 	class Meta:
