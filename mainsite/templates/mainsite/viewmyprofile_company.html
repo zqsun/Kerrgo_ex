@@ -1,0 +1,124 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block body %}
+{% if ftag == 1 %}
+<div class="col-md-8">
+	<div class="panel panel-default">
+		<div class="panel-heading">{{profile.fullname}}</div>
+		<div class="panel-body">
+			<p class="text-right">{{profile.goal}}</p>
+			<hr>
+			<p>{{profile.description}}</p>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">Summary</div>
+		<div class="panel-body">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Prior Year Revenue</th>
+						<th>Current Year Revenue</th>
+						<th>Next Year Revenue</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{ cp.priorRevenue}}</td>
+						<td>{{ cp.curRevenue}}</td>
+						<td>{{ cp.nextRevenue}}</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Company Age</th>
+						<th>Employees</th>
+						<th>Company Type</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{ cp.companyAge}}</td>
+						<td>{{ cp.employees}}</td>
+						<td>{{ cp.cType}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">Products / Services </div>
+		<div class="panel-body">
+			<h5>{{cp.productName}}</h5>
+			<p>{{productDescription}}</p>
+		</div>
+	</div>
+</div>
+<div class="col-md-4">
+	<div class="panel panel-default">
+		<div class="panel-heading">Funding</div>
+		<div class="panel-body">
+			<p>Funding Type<span class="pull-right" style="color:#2d68b2;">{{cp.fType}}</span></p>
+			<hr>
+			<p>Pre-Money Valuation<span class="pull-right" style="color:#2d68b2;">{{cp.preMoney}}</span></p>
+			<hr>
+			<p>Interest / Dividend<span class="pull-right" style="color:#2d68b2;">{{cp.interest}}</span></p>
+		</div>
+	</div>
+	<a href="#" class="btn btn-outline btn-success col-md-12">Contact</a>
+</div>
+{% endif %}
+{% if ftag == 2 %}
+<div class="col-md-8">
+	<div class="panel panel-default">
+		<div class="panel-heading">{{profile.fullname}}</div>
+		<div class="panel-body">
+			<p class="text-right">{{profile.goal}}</p>
+			<hr>
+			<p>{{profile.description}}</p>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">Summary</div>
+		<div class="panel-body">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Sales</th>
+						<th>Profit</th>
+						<th>Asking Price</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{cp.sales}}</td>
+						<td>{{cp.profit}}</td>
+						<td>{{cp.price}}</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Fiscal Year</th>
+						<th>Employees</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{cp.fiscalYear}}</td>
+						<td>{{cp.employees}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="col-md-4">
+	<a href="#" class="btn btn-outline btn-success col-md-12">Contact</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block body %}
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<form role="form" method="post" action="{% url 'mainsite:editProfile_company' %}" enctype="multipart/form-data">
+					<div class="form-group">{% csrf_token %}</div>
+					<div class="form-group">
+						<label>Full Name</label>
+						{% if profile_form.fullname.errors %}
+							<div class="alert alert-danger" role="alert">
+						    <ul>
+						    {% for error in profile_form.fullname.errors %}
+						        <li>{{ error|escape }}</li>
+						    {% endfor %}
+						    </ul>
+						    </div>
+						{% endif %}
+						{% render_field profile_form.fullname class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Role</label>
+						{% render_field profile_form.role class="form-control" disabled=""%}
+						<input type = "hidden" name="role" value="{{profile_form.role.value}}" readonly=""></input>	
+					</div>
+					<div class="form-group">
+						<label>Goal</label>
+						{% render_field profile_form.goal class="form-control" disabled=""%}
+						<input type = "hidden" name="goal" value="{{profile_form.goal.value}}" readonly=""></input>
+					</div>
+					<div class="form-group">
+						<label>Industry</label>
+						{{ profile_form.category.errors }} 
+						{% render_field profile_form.category %}	
+					</div>
+					<div class="form-group">
+						<label>Contry</label>
+						{% render_field profile_form.country class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>State/ Province</label>
+						{% render_field profile_form.state class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Short Desription</label>
+						{% render_field cp_form.shortDescription class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Detailed desription</label>
+						{% render_field profile_form.description class="form-control" %}	
+					</div>
+					{% if ftag == 1 %}
+					<div class="form-group">
+						<label>Prior Year Revenue</label>
+						{% render_field cp_form.priorRevenue class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Current Year Revenue</label>
+						{% render_field cp_form.curRevenue class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Next Year Revenue</label>
+						{% render_field cp_form.nextRevenue class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Company Age</label>
+						{% render_field cp_form.companyAge class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Employees</label>
+						{% render_field cp_form.employees class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Company Type</label>
+						{% render_field cp_form.cType class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Product / Service name</label>
+						{% render_field cp_form.productName class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Product Description</label>
+						{% render_field cp_form.productDescription class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Funding Type</label>
+						{% render_field cp_form.fType class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Pre-Money Valuation($)</label>
+						{% render_field cp_form.preMoney class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Interest/ Dividend(%)</label>
+						{% render_field cp_form.interest class="form-control" %}	
+					</div>
+					{% endif %}
+					{% if ftag == 2 %}
+					<div class="form-group">
+						<label>Sales</label>
+						{% render_field cp_form.sales class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Profit</label>
+						{% render_field cp_form.profit class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Fiscal Year</label>
+						{% render_field cp_form.fiscalYear class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Employees</label>
+						{% render_field cp_form.employees class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Asking Price</label>
+						{% render_field cp_form.price class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Is the seller willing to provide financing to the buyer?</label>
+						{% render_field cp_form.provideFinancing class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Is this listing for principals only?</label>
+						{% render_field cp_form.pricipalsOnly class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Is the business a franchise?</label>
+						{% render_field cp_form.isFranchise class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Is the current management willing to stay through a transition period?</label>
+						{% render_field cp_form.manageStay class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Is this business relocatable?</label>
+						{% render_field cp_form.relocatable class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Is real estate included in the sale?</label>
+						{% render_field cp_form.realEstateInclude class="form-control" %}	
+					</div>
+					{% endif %}
+					<input type="submit" class="btn btn-lg btn-success btn-block" value="Submit" />
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

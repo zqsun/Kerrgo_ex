@@ -1,0 +1,34 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+
+{% block body %}
+	<div class="col-lg-12"><h3>Hello {{ user.get_username }}</h3></div>
+	<div class="col-md-8">
+		<div class="panel panel-info">
+			<div class="panel-heading">Companies</div>
+			<ul class="list-group">
+				{% for iC in interestCompany %}
+				<li class="list-group-item">
+					<h4><a href="#">{{iC.fullname}}</a></h4>
+					<p>Signed up as an entrepreneur on {{iC.created_at|date:"M d"}}</p>
+					<p class=""></p>
+				</li>
+				{% endfor %}
+			</ul>
+			<a href="#" class="btn btn-outline btn-success col-md-12">View More Companies</a>
+		</div>
+	</div>
+	<div class="col-md-4 ">
+		<div class="panel panel-info">
+			<div class="panel-heading"> Business Profile</div>
+			<div class="panel-body">
+				<h4>Make a Business Profile</h4>
+				<p>Present your business to investors in a professional way. The more complete your profile, the better your chances of getting funded.</p>
+			</div>
+			<div class="panel-footer">
+				<a href="{% url 'mainsite:editProfile_investor' %}" class="btn btn-outline btn-success col-md-offset-2">Edit</a>
+				<a href="{% url 'mainsite:viewmyProfile_investor' %}" class="btn btn-outline btn-success col-md-offset-2">View</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

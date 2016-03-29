@@ -1,0 +1,55 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block body %}
+<div class="col-md-8">
+	<div class="panel panel-default">
+		<div class="panel-heading">{{profile.fullname}}</div>
+		<div class="panel-body">
+			<p class="text-right">{{ip.iType}}</p>
+			<hr>
+			<p>{{profile.description}}</p>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">Summary</div>
+		<div class="panel-body">
+			<h5>Indudtries</h5>
+			<ul>
+				{% for c in profile.category.all %}
+				<li>{{c}}</li>
+				{% endfor %}
+			</ul>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Capital Type</th>
+						<th>Pre-Money Valuation Level</th>
+						<th>Expected Return</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{ ip.capital}}</td>
+						<td>${{ ip.preMoney_min}} - ${{ ip.preMoney_max}}</td>
+						<td>{{ ip.expectedReturn}}%</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="col-md-4">
+	<div class="panel panel-default">
+		<div class="panel-heading">Funding</div>
+		<div class="panel-body">
+			<p class = "text-center" style="color:#2d68b2;">${{ip.revenueStage_min}} - ${{ip.revenueStage_max}}</p>
+			<p class = "text-center">revenue stage</p>
+			<hr>
+			<p class = "text-center" style="color:#2d68b2;">${{ip.investAmount_min}} - ${{ip.investAmount_max}}</p>
+			<p class = "text-center">investment amount</p>
+		</div>
+	</div>
+	<a href="#" class="btn btn-outline btn-success col-md-12">Contact</a>
+</div>
+{% endblock %}
