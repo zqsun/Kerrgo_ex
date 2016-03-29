@@ -1,0 +1,10 @@
+{% extends "postman/mypostman/base_write.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block page-header %}{% trans "Reply"%}{% endblock %}
+{% block pm_write_recipient %}
+<div class="form-group">
+	<label>{% trans "Recipient" %}:</label>
+	{{ recipient }}
+</div>
+{% endblock %}

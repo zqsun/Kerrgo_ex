@@ -1,0 +1,52 @@
+{% extends "postman/mypostman/base.html" %}
+{% load widget_tweaks %}
+{% load i18n %}
+{% block extrahead %}{{ block.super }}
+{% if autocompleter_app.is_active %}
+{# dj v1.4 #}{% load static %}
+<script type="text/javascript"src="
+{# using the available admin jQuery is enough: #}
+ {# dj v1.4 #}{% static 'admin/js/jquery.min.js' %}
+ {# dj v1.2/3 #}{# {% load adminmedia %}{% admin_media_prefix %}js/jquery.min.js #}
+{# unless you really want your own: #}
+ {# dj v1.2 #}{# {{ MEDIA_URL }}js/jquery.min.js #}
+"></script>
+{% if autocompleter_app.name == "ajax_select" %}{% if autocompleter_app.version == "1.1.4" or autocompleter_app.version == "1.1.5" %}<script type="text/javascript" src="
+{# dj v1.4 #}{% static 'js/jquery.autocomplete.min.js' %}
+{# dj v1.3 #}{# {{ STATIC_URL }}js/jquery.autocomplete.min.js #}
+{# dj v1.2 #}{# {{ MEDIA_URL }}js/jquery.autocomplete.min.js #}
+"></script>
+<link type="text/css" media="all" rel="stylesheet" href="
+{# dj v1.4 #}{% static 'css/jquery.autocomplete.css' %}
+{# dj v1.3 #}{# {{ STATIC_URL }}css/jquery.autocomplete.css #}
+{# dj v1.2 #}{# {{ MEDIA_URL }}css/jquery.autocomplete.css #}
+" />{# else: for version 1.2.x use AJAX_SELECT_BOOTSTRAP + AJAX_SELECT_INLINES or arrange to include jqueryUI/js/css #}{% endif %}{% endif %}
+{% endif %}
+{% endblock %}
+{% block page-wrapper %}
+<div id="postman">
+<div class="panel panel-default">
+	<div class="panel-body">
+		<form action="{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" method="post">
+		<div class="form-group">{% csrf_token %}</div>
+		{% block pm_write_recipient %}{% endblock %}
+		<div class="form-group">
+			{{ form.recipients.label_tag }}
+			{% render_field form.recipients class="form-control" autofocus="" %}
+		</div>
+		<div class="form-group">
+			{{ form.subject.label_tag }}
+			{% render_field form.subject class="form-control" %}
+		</div>
+		<div class="form-group">
+			{{ form.body.label_tag }}
+			{% render_field form.body class="form-control" %}
+		</div>
+		<input type="submit" class="btn btn-lg btn-success btn-block" value="Send" />
+		</form>
+	</div>
+	<div class="panel-footer"></div>
+</div>
+
+</div>
+{% endblock %}
