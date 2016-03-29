@@ -143,6 +143,7 @@ INSTALLED_APPS = [
     "userprofile",
     "mainsite",
     "pagination",
+    "postman",
 
     # project
     "Kerrgo",
