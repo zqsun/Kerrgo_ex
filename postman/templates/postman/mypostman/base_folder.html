@@ -7,7 +7,7 @@ for the template tag library.
 If the real implementation is to be used, just make sure that 'pagination' is declared before 'postman'
 in the INSTALLED_APPS setting.
 {% endcomment %}
-{% block page-wrapper %}
+{% block page-body %}
 <div id="postman">
 
 {% autopaginate pm_messages %}
@@ -83,4 +83,4 @@ in the INSTALLED_APPS setting.
 {% endif %}
 {% block pm_footer_info %}{% endblock %}
 </div>
-{% endblock page-wrapper %}
+{% endblock page-body %}

@@ -53,6 +53,11 @@
 
 {% endblock %}
 
+{% block body %}
+<h3>{% block page-header %} {% endblock %}</h3>
+{% block page-body %} {% endblock %}
+{% endblock %}
+
 <!-- <ul class="dropdown-menu dropdown-messages">
                         <li>
                             <a href="#">
