@@ -118,7 +118,7 @@
 	</div>
 </div>
 <div class="col-md-4">
-	<a href="#" class="btn btn-outline btn-success col-md-12">Contact</a>
+	<a href="{%url 'postman_write' %}{{profile.user.username}}" class="btn btn-outline btn-success col-md-12">Contact</a>
 </div>
 {% endif %}
 {% endblock %}
