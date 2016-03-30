@@ -28,12 +28,12 @@ class Profile(models.Model):
 	#description = models.TextField(default=" ",null=True,blank=True)
 	#logo = models.ImageField(upload_to='profile_images',blank=True)
 	role = models.ForeignKey(UserRole)
-	category = models.ManyToManyField(bizCategory)
+	# category = models.ManyToManyField(bizCategory)
 	goal = models.ForeignKey(bizGoal,blank=True, null=True) #For company Only
 	# Location
 	country = models.CharField(max_length=100,null=True,blank=True)
 	state = models.CharField(max_length=100,null=True,blank=True)
-	
+	#description = models.TextField(default=" ",null=True,blank=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 	isProfilecreated = models.BooleanField(default=False)
 	# address = models.CharField(max_length=150)
@@ -56,8 +56,9 @@ class capitalType(models.Model):
 class InvestorProfile(models.Model):
 	investor = models.ForeignKey(User)
 	iType = models.ForeignKey(investorType,null=True,blank=True)
-	capital = models.ForeignKey(capitalType,null=True,blank=True)
+	category = models.ManyToManyField(bizCategory)
 	description = models.TextField(default=" ",null=True,blank=True)
+	capital = models.ForeignKey(capitalType,null=True,blank=True)
 	preMoney_min = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	preMoney_max = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	expectedReturn = models.DecimalField(default=0,max_digits=4,decimal_places=2,null=True,blank=True)
@@ -84,6 +85,8 @@ class fundingType(models.Model):
 
 class CompanyProfile_seekFund(models.Model):
 	company = models.ForeignKey(User)
+	category = models.ManyToManyField(bizCategory)
+	goal = models.ForeignKey(bizGoal,blank=True, null=True) #For company Only
 	shortDescription = models.TextField(default=" ",null=True,blank=True,max_length=200)
 	description = models.TextField(default=" ",null=True,blank=True)
 	priorRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
@@ -100,6 +103,8 @@ class CompanyProfile_seekFund(models.Model):
 
 class CompanyProfile_sale(models.Model):
 	company = models.ForeignKey(User)
+	category = models.ManyToManyField(bizCategory)
+	goal = models.ForeignKey(bizGoal,blank=True, null=True) #For company Only
 	shortDescription = models.TextField(default=" ",null=True,blank=True,max_length=200)
 	description = models.TextField(default=" ",null=True,blank=True)
 	sales = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)

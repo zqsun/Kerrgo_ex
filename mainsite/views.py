@@ -3,8 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 
+from haystack.generic_views import SearchView
+
 from userprofile.models import *
 from userprofile.forms import ProfileForm,InvestorForm,cpSeekFundForm, cpSaleForm,GoalForm
+from mainsite.forms import CompanySearchForm
 
 # Create your views here.
 @login_required
@@ -99,7 +102,8 @@ def editProfile_company(request):
 			profile_form.save_m2m()
 			messages.success(request, 'Your profile is successfullly updated.')
 		if cp_form.is_valid():
-			companyprofile = cp_form.save()
+			companyprofile = cp_form.save(commit=False)
+			companyprofile.goal = profile.goal
 			companyprofile.save()
 		return HttpResponseRedirect(reverse('mainsite:dashboard'))
 		#return HttpResponseRedirect(reverse('mainsite:editProfile_company')) 
@@ -136,3 +140,20 @@ def editProfile_investor(request):
 		ip_form =  InvestorForm(instance=ip)
 	context = {'profile_form':profile_form,'ip_form':ip_form}
 	return render(request,'mainsite/editProfile_investor.html',context)
+
+class MySearchView(SearchView):
+    """My custom search view."""
+    template_name = 'search/search.html'
+    #queryset = SearchQuerySet().filter(author='john')
+    form_class = CompanySearchForm
+
+    def get_queryset(self):
+        queryset = super(MySearchView, self).get_queryset()
+        # further filter queryset based on some set of criteria
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(MySearchView, self).get_context_data(*args, **kwargs)
+        # do something
+        return context
+
