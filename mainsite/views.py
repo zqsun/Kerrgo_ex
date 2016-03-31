@@ -144,21 +144,44 @@ def editProfile_investor(request):
 	context = {'profile_form':profile_form,'ip_form':ip_form}
 	return render(request,'mainsite/editProfile_investor.html',context)
 
-class MySearchView(SearchView):
-    """My custom search view."""
-    template_name = 'search/search.html'
-    queryset = SearchQuerySet()
-    form_class = CompanySearchForm
+@login_required
+def viewCompany(request,user_id):
+	p = Profile.objects.get(user=user_id)
+	if p.goal == bizGoal.objects.get(pk=1):
+		cp = CompanyProfile_seekFund.objects.get(company=user_id)
+		ftag = 1
+	else:
+		cp = CompanyProfile_sale.objects.get(company=user_id)
+		ftag = 2
+	context = {'profile':p,'cp':cp,'ftag':ftag}
+	return render(request,'mainsite/viewmyprofile_company.html',context)
 
-    def get_queryset(self):
-        queryset = super(MySearchView, self).get_queryset()
-        # further filter queryset based on some set of criteria
-        return queryset
+@login_required
+def viewInvestor(request,user_id):
+	p = Profile.objects.get(user=user_id)
+	ip = InvestorProfile.objects.get(investor=user_id)
+	context = {'profile':p,'ip':ip}
+	return render(request,'mainsite/viewmyprofile_investor.html',context)
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(MySearchView, self).get_context_data(*args, **kwargs)
-        # do something
-        return context
+def browseInvestor(request,type_name):
+    if type_name == "ALL":
+        results = InvestorProfile.objects.all()
+    else:
+        results = InvestorProfile.objects.filter(iType__iType__contains=category_name)
+    #company_form = CompanySearchForm()
+    context = {'results':results,'type':type_name}
+    return render(request, 'mainsite/browseInvestor.html', context)
+
+def browseCompany(request,goal_name):
+    if goal_name == "seek":
+        results = CompanyProfile_seekFund.objects.all()
+        goal = "Seeking Funding"
+    else:
+        results = CompanyProfile_sale.objects.all()
+        goal = "Selling Company"
+    company_form = CompanySearchForm()
+    context = {'results':results,'goal':goal_name,'form':company_form}
+    return render(request, 'mainsite/browseCompany.html', context)
 
 def my_basic_search(request, template='search/search.html', load_all=True, form_class=CompanySearchForm, searchqueryset=None, extra_context=None, results_per_page=None):
     """

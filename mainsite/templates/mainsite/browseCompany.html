@@ -1,0 +1,60 @@
+{% extends 'site_base.html' %}
+{% load i18n pagination_tags %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+
+{% block body %}
+<!-- <div class="container"> -->
+<form role="form" method="get" action="{% url 'mainsite:mysearch' %}">
+    <div class="row">
+        <div class="form-group col-md-4">
+            {% render_field form.category class="form-control" %}
+        </div>
+        <div class="form-group col-md-4">
+            {% render_field form.goal class="form-control" %}
+        </div>
+        <div class="form-group input-group col-md-4">
+            {% render_field form.q class="form-control" placeholder="Search for..."%}
+            <span class="input-group-btn">
+                <input type="submit" class="btn btn-default" value="Search" />
+                <!-- <button class="btn btn-default" type="button">Go!</button> -->
+            </span>
+        </div>
+    </div>
+</form>
+<h3>{{ results.count }} Projects in {{ goal }}</h3>
+<hr>
+{% autopaginate results 6 %}
+{% if invalid_page %}
+    <p>{% trans "Sorry, this page number is invalid." %}</p>
+{% else %}
+{% if results %}
+    {% for r in results %}
+    {% if forloop.counter0|divisibleby:"3" %} <div class="row"> {% endif %}
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b>{{r.company.myprofile.fullname}}</b>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-inline">
+                        <li class = "col-md-6"><b>{{r.goal.goal}}</b></li>
+                    </ul>
+                    <hr>
+                    <p class = "col-md-12">{{r.description|truncatewords_html:40}}</p>
+                </div>
+                <div class="panel-footer">
+                    <a href="{% url 'mainsite:viewCompany' r.company.id %}" class="btn btn-outline btn-success col-md-offset-4" target="_blank">View Details</a>
+                </div>
+            </div>
+        </div>
+    {% if forloop.counter|divisibleby:"3" or forloop.last %} </div>{% endif %}
+    {% endfor %}
+{% endif %}
+<!-- Pager -->
+{% endif %}
+<nav>
+{% paginate %}
+</nav>
+<!-- </div> -->
+{% endblock %}

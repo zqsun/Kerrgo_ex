@@ -2,76 +2,146 @@
 
 {% load i18n %}
 
-{% block head_title %}pinax-project-account{% endblock %}
+{% block head_title %}Home{% endblock %}
 
 {% block body_class %}home{% endblock %}
 
 {% block body_base %}
-    <section class="jumbotron">
-        <div class="container">
-            {% include "_messages.html" %}
-            <h1>{% blocktrans %}Welcome to<br>pinax-project-account{% endblocktrans %}</h1>
-            <p>
-                {% blocktrans %}
-                In addition to what is provided by the "zero" project, this project
-                provides thorough integration with django-user-accounts, adding
-                comprehensive account management functionality. It is a foundation
-                suitable for most sites that have user accounts.
-                {% endblocktrans %}
-            </p>
-            {% if not user.is_authenticated %}
-            {% url "account_login" as login_url %}
-            {% url "account_signup" as signup_url %}
-            <p>{% blocktrans %}You can <a href="{{ login_url }}" class="btn btn-default">Log In</a> or <a href="{{ signup_url }}" class="btn btn-primary">Sign Up</a> to try out the site.{% endblocktrans %}</p>
-            {% endif %}
-        </div>
-    </section>
-    <section>
-        <div class="container">
-            <h2 class="text-center">{% blocktrans %}What is Pinax?{% endblocktrans %}</h2>
-            <p class="lead">
-                {% blocktrans %}
-                <b>Pinax</b> is an open-source platform based on Django and
-                intended to provide a starting point for websites. It takes
-                care of the things that many sites have in common, so you can
-                focus on what makes your site different.
-                {% endblocktrans %}
-            </p>
-            <div class="feature-columns">
-                <div>
-                    <i class="fa fa-cubes fa-3x"></i><br>
-                    {% blocktrans %}
-                    <b>Starter projects</b> provide project layout,
-                    scaffolding, already integrated components and
-                    ready-to-go code.
-                    {% endblocktrans %}
-                </div>
-                <div>
-                    <i class="fa fa-puzzle-piece fa-3x"></i><br>
-                    {% blocktrans %}
-                    <b>Reusable apps</b> provide common
-                    infrastructure, back-end functionality,
-                    and user-facing components.
-                    {% endblocktrans %}
-                </div>
-                <div>
-                    <i class="fa fa-tint fa-3x"></i><br>
-                    {% blocktrans %}
-                    <b>Themes</b> provide default templates and
-                    stylesheets for quick prototyping and easy customization.
-                    {% endblocktrans %}
-                </div>
+{% comment "Optional Slider" %}
+<div id="myCarouselSlider" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarouselSlider" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarouselSlider" data-slide-to="1" class=""></li>
+        <li data-target="#myCarouselSlider" data-slide-to="2" class=""></li>
+      </ol>
+      <div class="carousel-inner" role="listbox">
+        <div class="item active">
+          <img class="first-slide slider_img" src="http://ridhomuhammadsakti.com/wp-content/uploads/2015/02/rtv-tools-slider-background.jpg" alt="First slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Example headline.</h1>
+              <p>Note: If you're viewing this page via a <code>file://</code> URL, the "next" and "previous" Glyphicon buttons on the left and right might not load/display properly due to web browser security rules.</p>
+              <p><a class="btn btn-lg btn-primary" href="{% url 'account_signup' %}" role="button">Sign up today</a></p>
             </div>
+          </div>
         </div>
-    </section>
-    <section>
-        <div class="container">
-            <p class="lead text-center">
-                {% blocktrans %}
-                See <a href="http://pinaxproject.com/">pinaxproject.com</a>
-                for more information.
-                {% endblocktrans %}
-            </p>
+        <div class="item">
+          <img class="second-slide slider_img" src="http://www.citadelny.com/wp-content/uploads/2014/01/citadel-slider-background-cloud-1.jpg" alt="Second slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Our Partners</h1>
+              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              <p><a class="btn btn-lg btn-primary" href="{% url 'browsepartners' %}" role="button">Learn more</a></p>
+            </div>
+          </div>
         </div>
-    </section>
+        <div class="item">
+          <img class="third-slide slider_img" src="http://competitivenaturalgas.com/wp-content/uploads/2014/04/Slider-Background-city.jpg" alt="Third slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Projects</h1>
+              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              <p><a class="btn btn-lg btn-primary" href="{% url 'mainsite:browseProject' 'ALL' %}" role="button">Browse Projects</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="left carousel-control" href="#myCarouselSlider" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarouselSlider" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+    {% endcomment %}
+    <!-- Main Body  -->
+    <div class="container" role="main">
+
+      <h2 class = "text-center">JOIN OUR EXCLUSIVE INVESTOR NETWORK</h2>
+      <hr>
+      <!-- <h4 class="text-center">WE ARE PLEASED TO OFFER BOTH ACCREDITED AND NON-ACCREDITED U.S. INVESTORS* THE OPPORTUNITY TO BE INCLUDED IN OUR DEAL FLOW</h4> -->
+      <p class="text-center">We provide a myriad of value-added services for both Chinese funds/investors who are investing in U.S. /Israel companies/technologies</p>
+      <p class="text-center">As well as </p>
+      <p class="text-center">U.S./ Israel companies who are looking for investors, strategic partners, market entrance to China or sell its companies or transfer its technologies</p>
+      <div class="marketing">
+        <!-- Three columns of text below the carousel -->
+        <div class="row">
+          <div class="col-md-2 col-md-offset-1">
+            <img class="img-circle" src="http://chasmic-research.com/wp-content/uploads/2014/07/Business-Plan.jpg" alt="Generic placeholder image" width="140" height="140">
+            <h3>SELL YOUR COMPANY</h2>
+            <p>List your company and we help you find the best buyers</p>
+            <!-- <p><a class="btn btn-default" href="#" role="button">View details »</a></p> -->
+          </div><!-- /.col-lg-4 -->
+          <div class="col-md-2">
+            <img class="img-circle" src="http://www.filminvesting.net/wp-content/uploads/2015/03/Invest.jpg" alt="Generic placeholder image" width="140" height="140">
+            <h3>LOOK FOR INVESTORS</h2>
+            <p>We have all the major funds and private investors as our partner, please upload your company profile and business executives summary</p>
+            <!-- <p><a class="btn btn-default" href="#" role="button">View details »</a></p> -->
+          </div><!-- /.col-lg-4 -->
+          <div class="col-md-2">
+            <img class="img-circle" src="http://www.ideabuyer.com/news/wp-content/uploads/2008/10/patentlicensingnegotiations.png" alt="Generic placeholder image" width="140" height="140">
+            <h3>TECHNOLOGY LICENSING </h2>
+            <p>If you want to transfer or license your technology.  Please list your company profile and technology for Chinese companies and investors to find you</p>
+            <!-- <p><a class="btn btn-default" href="#" role="button">View details »</a></p> -->
+          </div><!-- /.col-lg-4 -->
+          <div class="col-md-2">
+            <img class="img-circle" src="http://www.billgenie.com/assets/images/gsi_strategic_partners_cropped.jpg" alt="Generic placeholder image" width="140" height="140">
+            <h3>LOOK FOR STRATEGIC PARTNER  </h2>
+            <p></p>
+            <!-- <p><a class="btn btn-default" href="#" role="button">View details »</a></p> -->
+          </div><!-- /.col-lg-4 -->
+          <div class="col-md-2">
+            <img class="img-circle" src="http://webber.edu/wp-content/uploads/2015/05/marketing.png" alt="Generic placeholder image" width="140" height="140">
+            <h3>MARKET ENTRANCE </h2>
+            <p></p>
+            <!-- <p><a class="btn btn-default" href="#" role="button">View details »</a></p> -->
+          </div><!-- /.col-lg-4 -->
+        </div><!-- /.row -->
+
+
+          <!-- START THE FEATURETTES -->
+
+          <!-- <hr class="featurette-divider"> -->
+
+              <!-- <div class="row featurette">
+                <div class="col-md-7">
+                  <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It'll blow your mind.</span></h2>
+                  <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                </div>
+                <div class="col-md-5">
+                  <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+                </div>
+              </div>
+
+              <hr class="featurette-divider">
+
+              <div class="row featurette">
+                <div class="col-md-7 col-md-push-5">
+                  <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
+                  <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                </div>
+                <div class="col-md-5 col-md-pull-7">
+                  <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+                </div>
+              </div>
+
+              <hr class="featurette-divider">
+
+              <div class="row featurette">
+                <div class="col-md-7">
+                  <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
+                  <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                </div>
+                <div class="col-md-5">
+                  <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+                </div>
+              </div>
+
+              <hr class="featurette-divider"> -->
+
+              <!-- /END THE FEATURETTES -->
+      </div>
 {% endblock %}

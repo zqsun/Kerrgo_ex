@@ -1,0 +1,44 @@
+{% extends 'site_base.html' %}
+{% load i18n pagination_tags %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+
+{% block body %}
+<div class="container">
+<h3>{{ results.count }} Investors is {{ category }}</h3>
+<hr>
+{% autopaginate results 6 %}
+{% if invalid_page %}
+    <p>{% trans "Sorry, this page number is invalid." %}</p>
+{% else %}
+{% if results %}
+    {% for r in results %}
+    {% if forloop.counter0|divisibleby:"3" %} <div class="row"> {% endif %}
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b>{{r.investor.myprofile.fullname}}</b>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-inline">
+                        <li class = "col-md-6"><b>{{r.iType.iType}}</b></li>
+                        <!-- <li class = "col-md-4"> </li> -->
+                    </ul>
+                    <hr>
+                    <p class = "col-md-12">{{r.description|truncatewords_html:40}}</p>
+                </div>
+                <div class="panel-footer">
+                    <a href="{% url 'mainsite:viewInvestor' r.investor.id %}" class="btn btn-outline btn-success col-md-offset-4" target="_blank">View Details</a>
+                </div>
+            </div>
+        </div>
+    {% if forloop.counter|divisibleby:"3" or forloop.last %} </div>{% endif %}
+    {% endfor %}
+{% endif %}
+<!-- Pager -->
+{% endif %}
+<nav>
+{% paginate %}
+</nav>
+</div>
+{% endblock %}

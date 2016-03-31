@@ -9,7 +9,7 @@
 			<ul class="list-group">
 				{% for aI in activeInvestor %}
 				<li class="list-group-item">
-					<h4><a href="#">{{aI.fullname}}</a></h4>
+					<h4><a href="{% url 'mainsite:viewInvestor' aI.user.id %}">{{aI.fullname}}</a></h4>
 					<p>Signed up as an investor on {{aI.created_at|date:"M d"}}</p>
 					<p class=""></p>
 				</li>

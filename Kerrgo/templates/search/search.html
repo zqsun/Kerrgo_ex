@@ -45,7 +45,7 @@
                                     <p class = "col-md-12">{{r.object.shortDescription|truncatewords_html:40}}</p>
                                 </div>
                                 <div class="panel-footer">
-                                    <a href="#" class="btn btn-outline btn-success col-md-offset-4" target="_blank">View Details</a>
+                                    <a href="{% url 'mainsite:viewCompany' r.object.company.id %}" class="btn btn-outline btn-success col-md-offset-4" target="_blank">View Details</a>
                                 </div>
                             </div>
                         </div>
