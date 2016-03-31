@@ -167,7 +167,7 @@ def browseInvestor(request,type_name):
     if type_name == "ALL":
         results = InvestorProfile.objects.all()
     else:
-        results = InvestorProfile.objects.filter(iType__iType__contains=category_name)
+        results = InvestorProfile.objects.filter(iType__iType__contains=type_name)
     #company_form = CompanySearchForm()
     context = {'results':results,'type':type_name}
     return render(request, 'mainsite/browseInvestor.html', context)
