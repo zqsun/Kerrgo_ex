@@ -3,7 +3,9 @@ from django.conf.urls import include,url
 from . import views
 
 urlpatterns = [
-	#url(r'^search/?$', views.my_basic_search, name="mysearch"),
+	#url(r'^search/?$', views.MySearchView.as_view(), name='mysearch'),
+	url(r'^search/?$', views.my_basic_search, name="mysearch"),
+	# url(r'^search/', include('haystack.urls')),
 	#url(r'^view/(?P<project_id>[0-9]+)/$',views.viewProject, name='viewProject'),
 	#url(r'^browse/(?P<category_name>[\w|\W]+)/$',views.browseProject, name='browseProject'),
 	#url(r'^service/(?P<goal_name>[\w|\W]+)/$',views.service, name='service'),
