@@ -1,7 +1,10 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.db.models import signals
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 # Create your models here.
 
 class UserRole(models.Model):
@@ -71,6 +74,19 @@ class InvestorProfile(models.Model):
 
 # Company Profile
 
+class CompanyProfile(models.Model):
+ 	content_type = models.ForeignKey(ContentType)
+ 	object_id = models.PositiveIntegerField()
+ 	content_object = GenericForeignKey('content_type','object_id')
+ 	created_at = models.DateTimeField(auto_now_add=True)
+ 	# def __str__(self):
+ 	# 	return self.content_object.company.myprofile.fullname
+def create_company(sender,instance,created, **kwargs):
+ 	content_type = ContentType.objects.get_for_model(instance)
+ 	company,_created = CompanyProfile.objects.get_or_create(content_type=content_type,object_id=instance.id)
+ 	company.created_at = instance.created_at
+ 	company.save()
+
 class companyType(models.Model):
 	cType = models.CharField(max_length=250,unique=True)
 	# desc_chs = models.CharField(max_length=250)
@@ -86,6 +102,7 @@ class fundingType(models.Model):
 class CompanyProfile_seekFund(models.Model):
 	company = models.ForeignKey(User)
 	category = models.ManyToManyField(bizCategory)
+	created_at = models.DateTimeField(auto_now_add=True)
 	goal = models.ForeignKey(bizGoal,blank=True, null=True) #For company Only
 	shortDescription = models.TextField(default=" ",null=True,blank=True,max_length=200)
 	description = models.TextField(default=" ",null=True,blank=True)
@@ -100,10 +117,12 @@ class CompanyProfile_seekFund(models.Model):
 	fType = models.ForeignKey(fundingType,null=True,blank=True)
 	preMoney = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	interest = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+signals.post_save.connect(create_company,sender=CompanyProfile_seekFund)
 
 class CompanyProfile_sale(models.Model):
 	company = models.ForeignKey(User)
 	category = models.ManyToManyField(bizCategory)
+	created_at = models.DateTimeField(auto_now_add=True)
 	goal = models.ForeignKey(bizGoal,blank=True, null=True) #For company Only
 	shortDescription = models.TextField(default=" ",null=True,blank=True,max_length=200)
 	description = models.TextField(default=" ",null=True,blank=True)
@@ -123,7 +142,7 @@ class CompanyProfile_sale(models.Model):
 	manageStay = models.CharField(max_length=2,choices=answerChoice,default='Y')
 	relocatable = models.CharField(max_length=2,choices=answerChoice,default='Y')
 	realEstateInclude = models.CharField(max_length=2,choices=answerChoice,default='Y')
-	
+signals.post_save.connect(create_company,sender=CompanyProfile_sale)
 
 
 
