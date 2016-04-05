@@ -105,6 +105,7 @@ def editProfile_company(request):
 		if cp_form.is_valid():
 			companyprofile = cp_form.save(commit=False)
 			companyprofile.goal = profile.goal
+			companyprofile.created_at = p.created_at
 			companyprofile.save()
 			cp_form.save_m2m()
 		return HttpResponseRedirect(reverse('mainsite:dashboard'))
@@ -173,15 +174,17 @@ def browseInvestor(request,type_name):
     return render(request, 'mainsite/browseInvestor.html', context)
 
 def browseCompany(request,goal_name):
-    if goal_name == "seek":
-        results = CompanyProfile_seekFund.objects.all()
-        goal = "Seeking Funding"
-    else:
-        results = CompanyProfile_sale.objects.all()
-        goal = "Selling Company"
-    company_form = CompanySearchForm()
-    context = {'results':results,'goal':goal_name,'form':company_form}
-    return render(request, 'mainsite/browseCompany.html', context)
+	if goal_name == "all":
+		results = CompanyProfile.objects.all().order_by('-created_at')
+	elif goal_name == "seek":
+		results = CompanyProfile_seekFund.objects.all()
+		goal = "Seeking Funding"
+	else:
+		results = CompanyProfile_sale.objects.all()
+		goal = "Selling Company"
+	company_form = CompanySearchForm()
+	context = {'results':results,'goal':goal_name,'form':company_form}
+	return render(request, 'mainsite/browseCompany.html', context)
 
 def my_basic_search(request, template='search/search.html', load_all=True, form_class=CompanySearchForm, searchqueryset=None, extra_context=None, results_per_page=None):
     """

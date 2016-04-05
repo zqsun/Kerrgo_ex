@@ -31,6 +31,7 @@
 {% if results %}
     {% for r in results %}
     {% if forloop.counter0|divisibleby:"3" %} <div class="row"> {% endif %}
+    {% if goal != "all" %}
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -48,6 +49,25 @@
                 </div>
             </div>
         </div>
+    {% else %}
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b>{{r.content_object.company.myprofile.fullname}}</b>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-inline">
+                        <li class = "col-md-6"><b>{{r.content_object.goal.goal}}</b></li>
+                    </ul>
+                    <hr>
+                    <p class = "col-md-12">{{r.content_object.description|truncatewords_html:40}}</p>
+                </div>
+                <div class="panel-footer">
+                    <a href="{% url 'mainsite:viewCompany' r.content_object.company.id %}" class="btn btn-outline btn-success col-md-offset-4" target="_blank">View Details</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
     {% if forloop.counter|divisibleby:"3" or forloop.last %} </div>{% endif %}
     {% endfor %}
 {% endif %}
