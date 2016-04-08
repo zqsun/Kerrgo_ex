@@ -29,13 +29,16 @@ class cpSeekFundForm(forms.ModelForm):
 	category = forms.ModelMultipleChoiceField(queryset=bizCategory.objects.all(),widget=forms.CheckboxSelectMultiple(),required=True)
 	class Meta:
 		model = CompanyProfile_seekFund
-		fields = ['category','shortDescription','description','priorRevenue','curRevenue','nextRevenue','companyAge',
-		'employees', 'cType','productName','productDescription','fType','preMoney','interest']
+		fields = ['category','description','capitalInvest','revenue','curNet','yearEstablished','employees','contactName','contactEmail','phone_number','website']
 
 class cpSaleForm(forms.ModelForm):
 	category = forms.ModelMultipleChoiceField(queryset=bizCategory.objects.all(),widget=forms.CheckboxSelectMultiple(),required=True)
 	class Meta:
 		model = CompanyProfile_sale
-		fields = ['category','shortDescription','description','sales','profit','fiscalYear','employees',
-		'price', 'provideFinancing','pricipalsOnly','isFranchise','manageStay','relocatable','realEstateInclude']
+		fields = ['category','description','revenue','sales','profit','yearEstablished','employees','price','contactName','contactEmail','phone_number','website']
+
+class FileForm(forms.ModelForm):
+	class Meta:
+		model = CompanyFile
+		fields = ['caption','file']
 			

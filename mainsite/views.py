@@ -2,12 +2,15 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.forms import formset_factory
+
+from django.contrib.contenttypes.models import ContentType
 
 from haystack.generic_views import SearchView
 from haystack.query import SearchQuerySet,EmptySearchQuerySet
 
 from userprofile.models import *
-from userprofile.forms import ProfileForm,InvestorForm,cpSeekFundForm, cpSaleForm,GoalForm
+from userprofile.forms import ProfileForm,InvestorForm,cpSeekFundForm, cpSaleForm,GoalForm,FileForm
 from mainsite.forms import CompanySearchForm
 
 # Create your views here.
@@ -26,12 +29,13 @@ def dashboard_investor(request):
 	p = request.user.myprofile
 	if p.role == UserRole.objects.get(pk=1):
 		return HttpResponseRedirect(reverse('mainsite:dashboard'))
-	if p.category.all().count() == 0:
-		interestCompany = Profile.objects.filter(role=1,).order_by('-created_at').all()[:12]
-	else:
-		interestCompany = Profile.objects.filter(category__in=p.category.all()).order_by('-created_at').all()[:12]
-		if interestCompany.count() == 0:
-			interestCompany = Profile.objects.filter(role=1,).order_by('-created_at').all()[:12]
+	interestCompany = Profile.objects.filter(role=1,).order_by('-created_at').all()[:12]
+	# if p.category.all().count() == 0:
+	# 	interestCompany = Profile.objects.filter(role=1,).order_by('-created_at').all()[:12]
+	# else:
+	# 	interestCompany = Profile.objects.filter(category__in=p.category.all()).order_by('-created_at').all()[:12]
+	# 	if interestCompany.count() == 0:
+	# 		interestCompany = Profile.objects.filter(role=1,).order_by('-created_at').all()[:12]
 	context = {'interestCompany':interestCompany}
 	return render(request,'mainsite/dashboard_investor.html',context)
 @login_required
@@ -90,8 +94,11 @@ def editProfile_company(request):
 	else:
 		cp, created = CompanyProfile_sale.objects.get_or_create(company=request.user)
 		ftag = 2
+	#filesFormSet = formset_factory()
 	if request.method == 'POST':
 		profile_form = ProfileForm(request.POST, instance=p)
+		# fileform = FileForm(request.POST,request.FILE)
+		#ffs = filesFormSet(request.POST,request.FILE)
 		if ftag == 1:
 			cp_form = cpSeekFundForm(request.POST,instance=cp)
 		else:
@@ -108,6 +115,14 @@ def editProfile_company(request):
 			companyprofile.created_at = p.created_at
 			companyprofile.save()
 			cp_form.save_m2m()
+		# if fileform.is_valid():
+		# 	file = fileform.save(commit=False)
+		# 	file.content_object = cp
+		# 	file.save()
+		# if ffs.is_valid():
+		# 	for fileform in ffs:
+		# 		file = fileform.save()
+		# 		file.save()
 		return HttpResponseRedirect(reverse('mainsite:dashboard'))
 		#return HttpResponseRedirect(reverse('mainsite:editProfile_company')) 
 	else:
@@ -116,6 +131,9 @@ def editProfile_company(request):
 			cp_form = cpSeekFundForm(instance=cp)
 		else:
 			cp_form = cpSaleForm(instance=cp)
+		content_type = ContentType.objects.get_for_model(cp)
+		fqs = CompanyFile.objects.filter(content_type=content_type,object_id=cp.id)
+		#ffs = filesFormSet(queryset = fqs)
 	context = {'profile_form':profile_form,'cp_form':cp_form,'ftag':ftag}
 	return render(request,'mainsite/editprofile_company.html',context)
 

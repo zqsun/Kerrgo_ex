@@ -4,7 +4,9 @@ from django.db import models
 from django.db.models import signals
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.core.validators import RegexValidator
+
 # Create your models here.
 
 class UserRole(models.Model):
@@ -87,36 +89,61 @@ def create_company(sender,instance,created, **kwargs):
  	company.created_at = instance.created_at
  	company.save()
 
-class companyType(models.Model):
-	cType = models.CharField(max_length=250,unique=True)
-	# desc_chs = models.CharField(max_length=250)
-	def __unicode__(self):
-		return self.cType
+def user_diretory_path(instance,filename):
+	return 'user_{0}/{1}'.format(instance.user.id,filename)
 
-class fundingType(models.Model):
-	fType = models.CharField(max_length=250,unique=True)
-	# desc_chs = models.CharField(max_length=250)
-	def __unicode__(self):
-		return self.fType
+class CompanyFile(models.Model):
+	caption = models.CharField(max_length=100,null=True,default='Company Document',blank=True)
+	file = models.FileField(upload_to=user_diretory_path)
+	content_type = models.ForeignKey(ContentType)
+	object_id = models.PositiveIntegerField()
+	content_object = GenericForeignKey('content_type','content_object')
+
+# class companyType(models.Model):
+# 	cType = models.CharField(max_length=250,unique=True)
+# 	# desc_chs = models.CharField(max_length=250)
+# 	def __unicode__(self):
+# 		return self.cType
+
+# class fundingType(models.Model):
+# 	fType = models.CharField(max_length=250,unique=True)
+# 	# desc_chs = models.CharField(max_length=250)
+# 	def __unicode__(self):
+# 		return self.fType
 
 class CompanyProfile_seekFund(models.Model):
 	company = models.ForeignKey(User)
 	category = models.ManyToManyField(bizCategory)
 	created_at = models.DateTimeField(auto_now_add=True)
 	goal = models.ForeignKey(bizGoal,blank=True, null=True) #For company Only
-	shortDescription = models.TextField(default=" ",null=True,blank=True,max_length=200)
 	description = models.TextField(default=" ",null=True,blank=True)
-	priorRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
-	curRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
-	nextRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
-	companyAge = models.FloatField(default=0)
+	capitalInvest = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	revenueChoice = (
+		('Y','Yes'),
+		('N', 'No'),
+		)
+	revenue = models.CharField(max_length=2,choices=revenueChoice,default='N')
+	curNet = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	yearEstablished = models.IntegerField(default=0,null=True,blank=True)
 	employees = models.IntegerField(default=0,null=True,blank=True)
-	cType = models.ForeignKey(companyType,null=True,blank=True)
-	productName = models.CharField(null=True,blank=True,max_length=250)
-	productDescription = models.TextField(default=" ",null=True,blank=True)
-	fType = models.ForeignKey(fundingType,null=True,blank=True)
-	preMoney = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
-	interest = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	files = GenericRelation(CompanyFile)
+	# Contact
+	contactName = models.CharField(max_length=100,default=" ",null=True,blank=True)
+	contactEmail = models.EmailField(max_length=254,default=" ",null=True,blank=True)
+	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+	phone_number = models.CharField(validators=[phone_regex], blank=True,null=True,max_length=15) # validators should be a list
+	website = models.URLField(blank=True,null=True)
+	# priorRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	# curRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	# nextRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	# companyAge = models.FloatField(default=0)
+	# employees = models.IntegerField(default=0,null=True,blank=True)
+	# cType = models.ForeignKey(companyType,null=True,blank=True)
+	# productName = models.CharField(null=True,blank=True,max_length=250)
+	# productDescription = models.TextField(default=" ",null=True,blank=True)
+	# fType = models.ForeignKey(fundingType,null=True,blank=True)
+	# preMoney = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	# interest = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 signals.post_save.connect(create_company,sender=CompanyProfile_seekFund)
 
 class CompanyProfile_sale(models.Model):
@@ -124,24 +151,32 @@ class CompanyProfile_sale(models.Model):
 	category = models.ManyToManyField(bizCategory)
 	created_at = models.DateTimeField(auto_now_add=True)
 	goal = models.ForeignKey(bizGoal,blank=True, null=True) #For company Only
-	shortDescription = models.TextField(default=" ",null=True,blank=True,max_length=200)
 	description = models.TextField(default=" ",null=True,blank=True)
+	revenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	sales = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	profit = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
-	fiscalYear = models.FloatField(default=0,null=True,blank=True)
+	yearEstablished = models.IntegerField(default=0,null=True,blank=True)
 	employees = models.IntegerField(default=0,null=True,blank=True)
 	price = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
-	answerChoice = (
-		('Y','Yes'),
-		('N', 'No'),
-		('ND', 'Not Disclosed'),
-		)
-	provideFinancing = models.CharField(max_length=2,choices=answerChoice,default='Y')
-	pricipalsOnly = models.CharField(max_length=2,choices=answerChoice,default='Y')
-	isFranchise = models.CharField(max_length=2,choices=answerChoice,default='Y')
-	manageStay = models.CharField(max_length=2,choices=answerChoice,default='Y')
-	relocatable = models.CharField(max_length=2,choices=answerChoice,default='Y')
-	realEstateInclude = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	files = GenericRelation(CompanyFile)
+	# Contact
+	contactName = models.CharField(max_length=100,default=" ",null=True,blank=True)
+	contactEmail = models.EmailField(max_length=254,default=" ",null=True,blank=True)
+	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+	phone_number = models.CharField(validators=[phone_regex], blank=True,null=True,max_length=15) # validators should be a list
+	website = models.URLField(blank=True,null=True)
+
+	# answerChoice = (
+	# 	('Y','Yes'),
+	# 	('N', 'No'),
+	# 	('ND', 'Not Disclosed'),
+	# 	)
+	# provideFinancing = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	# pricipalsOnly = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	# isFranchise = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	# manageStay = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	# relocatable = models.CharField(max_length=2,choices=answerChoice,default='Y')
+	# realEstateInclude = models.CharField(max_length=2,choices=answerChoice,default='Y')
 signals.post_save.connect(create_company,sender=CompanyProfile_sale)
 
 
