@@ -155,7 +155,7 @@ def editProfile_investor(request):
 		if ip_form.is_valid():
 			new_ip = ip_form.save()
 			new_ip.save()
-			ip_form.save_m2m()
+			#ip_form.save_m2m()
 		return HttpResponseRedirect(reverse('mainsite:dashboard_investor'))
 	else:
 		profile_form = ProfileForm(instance=p)

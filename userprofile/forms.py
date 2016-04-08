@@ -20,6 +20,7 @@ class GoalForm(forms.ModelForm):
 		fields = ['goal']
 
 class InvestorForm(forms.ModelForm):
+	category = forms.ModelMultipleChoiceField(queryset=bizCategory.objects.all(),widget=forms.CheckboxSelectMultiple(),required=True)
 	class Meta:
 		model = InvestorProfile
 		fields = ['category','iType','description','capital','preMoney_min','preMoney_max','expectedReturn','revenueStage_min','revenueStage_max','investAmount_min','investAmount_max']
