@@ -97,7 +97,7 @@ def editProfile_company(request):
 	#filesFormSet = formset_factory()
 	if request.method == 'POST':
 		profile_form = ProfileForm(request.POST, instance=p)
-		# fileform = FileForm(request.POST,request.FILE)
+		#fileform = FileForm(request.POST,request.FILE)
 		#ffs = filesFormSet(request.POST,request.FILE)
 		if ftag == 1:
 			cp_form = cpSeekFundForm(request.POST,instance=cp)

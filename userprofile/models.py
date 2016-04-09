@@ -93,8 +93,8 @@ def user_diretory_path(instance,filename):
 	return 'user_{0}/{1}'.format(instance.user.id,filename)
 
 class CompanyFile(models.Model):
-	caption = models.CharField(max_length=100,null=True,default='Company Document',blank=True)
-	file = models.FileField(upload_to=user_diretory_path)
+	# caption = models.CharField(max_length=100,null=True,default='Company Document',blank=True)
+	file = models.FileField(upload_to=user_diretory_path,null=True,blank=True)
 	content_type = models.ForeignKey(ContentType)
 	object_id = models.PositiveIntegerField()
 	content_object = GenericForeignKey('content_type','content_object')

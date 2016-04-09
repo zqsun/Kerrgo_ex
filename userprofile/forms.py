@@ -41,5 +41,5 @@ class cpSaleForm(forms.ModelForm):
 class FileForm(forms.ModelForm):
 	class Meta:
 		model = CompanyFile
-		fields = ['caption','file']
+		fields = ['file']
 			
