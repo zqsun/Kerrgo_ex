@@ -5,9 +5,9 @@
 {% if ftag == 1 %}
 <div class="col-md-8">
 	<div class="panel panel-default">
-		<div class="panel-heading">{{profile.fullname}}</div>
+		<div class="panel-heading">{{cp.name}}</div>
 		<div class="panel-body">
-			<p class="text-right">{{profile.goal}}</p>
+			<p class="text-right">{{cp.goal}}</p>
 			<hr>
 			<p>{{cp.description}}</p>
 		</div>
@@ -52,9 +52,9 @@
 {% if ftag == 2 %}
 <div class="col-md-8">
 	<div class="panel panel-default">
-		<div class="panel-heading">{{profile.fullname}}</div>
+		<div class="panel-heading">{{cp.name}}</div>
 		<div class="panel-body">
-			<p class="text-right">{{profile.goal}}</p>
+			<p class="text-right">{{cp.goal}}</p>
 			<hr>
 			<p>{{cp.description}}</p>
 		</div>
@@ -111,6 +111,6 @@
 			<p>Website<span class="pull-right" style="color:#2d68b2;">{{cp.website}}</span></p>
 		</div>
 	</div>
-	<a href="{%url 'postman_write' %}{{profile.user.username}}" class="btn btn-outline btn-success col-md-12">Contact</a>
+	<a href="{%url 'postman_write' %}{{cp.company.username}}" class="btn btn-outline btn-success col-md-12">Contact</a>
 </div>
 {% endblock %}

@@ -1,0 +1,51 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+
+{% block body %}
+	<div class="col-lg-12"><h3>Hello {{ user.get_username }}</h3></div>
+	<div class="col-md-4">
+		<div class="panel panel-info">
+			<div class="panel-heading">My Investors</div>
+			<ul class="list-group">
+				{% for investor in investors %}
+				<li class="list-group-item">
+					<h4><a href="{% url 'mainsite:editInvestors_admin' investor.id %}">{{investor.name}}</a></h4>
+					<p>Signed up as an Investor on {{investor.created_at|date:"M d"}}</p>
+					<p class=""></p>
+				</li>
+				{% endfor %}
+			</ul>
+			<a href="{% url 'mainsite:addInvestors_admin' %}" class="btn btn-outline btn-success col-md-12">Add New Investor</a>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="panel panel-info">
+			<div class="panel-heading">Company For Sale</div>
+			<ul class="list-group">
+				{% for sale in companySale %}
+				<li class="list-group-item">
+					<h4><a href="{% url 'mainsite:editCompany_admin' 'sale' sale.id %}">{{sale.name}}</a></h4>
+					<p>Signed up as an Company for sale on {{sale.created_at|date:"M d"}}</p>
+					<p class=""></p>
+				</li>
+				{% endfor %}
+			</ul>
+			<a href="{% url 'mainsite:addCompany_admin' 'sale' %}" class="btn btn-outline btn-success col-md-12">Add New</a>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="panel panel-info">
+			<div class="panel-heading">Company Seeking Investment</div>
+			<ul class="list-group">
+				{% for seek in companySeek %}
+				<li class="list-group-item">
+					<h4><a href="{% url 'mainsite:editCompany_admin' 'seek' seek.id %}">{{seek.name}}</a></h4>
+					<p>Signed up as an Company seeking investment on {{seek.created_at|date:"M d"}}</p>
+					<p class=""></p>
+				</li>
+				{% endfor %}
+			</ul>
+			<a href="{% url 'mainsite:addCompany_admin' 'seek' %}" class="btn btn-outline btn-success col-md-12">Add New</a>
+		</div>
+	</div>
+{% endblock %}

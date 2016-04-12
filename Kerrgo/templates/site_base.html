@@ -51,18 +51,7 @@
 					  	<li><a href="{% url 'mainsite:browseCompany' 'sale' %}">Sell Company</a></li>
 					  </ul>
 					</li>
-					<li class="dropdown">
-					  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Investors<span class="caret"></span></a>
-					  <ul class="dropdown-menu">
-					  	<li><a href="{% url 'mainsite:browseInvestor' 'ALL' %}">All Investors</a></li>
-					  	<li><a href="{% url 'mainsite:browseInvestor' 'Angel' %}">Angel Group</a></li>
-					  	<li><a href="{% url 'mainsite:browseInvestor' 'Debt' %}">Debt Provider</a></li>
-					  	<li><a href="{% url 'mainsite:browseInvestor' 'Government' %}">Government Funding Source</a></li>
-					  	<li><a href="{% url 'mainsite:browseInvestor' 'Individual' %}">Individual Investor</a></li>
-					  	<li><a href="{% url 'mainsite:browseInvestor' 'Non' %}">Non-Profit Funding Source</a></li>
-					  	<li><a href="{% url 'mainsite:browseInvestor' 'Venture' %}">Venture Capital Fund</a></li>
-					  </ul>
-					</li>
+					<li><a href="{% url 'mainsite:browseInvestor' 'ALL' %}">Investors</a></li>
 				</ul>
 				{% endblock %}
 				{% block account_bar %}{% include "_account_bar.html" %}{% endblock %}

@@ -9,8 +9,12 @@
 			<ul class="list-group">
 				{% for iC in interestCompany %}
 				<li class="list-group-item">
-					<h4><a href="#">{{iC.fullname}}</a></h4>
-					<p>Signed up as an entrepreneur on {{iC.created_at|date:"M d"}}</p>
+					{% if r.content_object.goal.goal == 'Look for Funding' %}
+                    <h4><a href="{% url 'mainsite:viewCompany' 'seek' iC.content_object.id %}" target="_blank">{{iC.content_object.name}}</a></h4>
+                    {% else %}
+                    <h4><a href="{% url 'mainsite:viewCompany' 'sale' iC.content_object.id %}" target="_blank">{{iC.content_object.name}}</a></h4>
+                    {% endif %}
+					<p>Signed up as a company on {{iC.content_object.created_at|date:"M d"}}</p>
 					<p class=""></p>
 				</li>
 				{% endfor %}
@@ -26,7 +30,7 @@
 				<p>Present your business to investors in a professional way. The more complete your profile, the better your chances of getting funded.</p>
 			</div>
 			<div class="panel-footer">
-				<a href="{% url 'mainsite:editProfile_investor' %}" class="btn btn-outline btn-success col-md-offset-2">Edit</a>
+				<a href="{% url 'mainsite:editProfile_investor' %}" class="btn btn-outline btn-success col-md-offset-2">Create</a>
 				<a href="{% url 'mainsite:viewmyProfile_investor' %}" class="btn btn-outline btn-success col-md-offset-2">View</a>
 			</div>
 		</div>

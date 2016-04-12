@@ -5,6 +5,7 @@
 
 {% block body %}
 <!-- <div class="container"> -->
+{% comment "Optional searchbox" %}
 <form role="form" method="get" action="{% url 'mainsite:mysearch' %}">
     <div class="row">
         <div class="form-group col-md-4">
@@ -22,6 +23,7 @@
         </div>
     </div>
 </form>
+{% endcomment %}
 <h3>{{ results.count }} Projects in {{ goal }}</h3>
 <hr>
 {% autopaginate results 6 %}
@@ -45,7 +47,11 @@
                     <p class = "col-md-12">{{r.description|truncatewords_html:40}}</p>
                 </div>
                 <div class="panel-footer">
-                    <a href="{% url 'mainsite:viewCompany' r.company.id %}" class="btn btn-outline btn-success col-md-offset-4" target="_blank">View Details</a>
+                    {% if r.goal.goal == 'Look for Funding' %}
+                    <a href="{% url 'mainsite:viewCompany' 'seek' r.company.id %}" class="btn btn-outline btn-success col-md-offset-4" target="_blank">View Details</a>
+                    {% else %}
+                    <a href="{% url 'mainsite:viewCompany' 'sale' r.company.id %}" class="btn btn-outline btn-success col-md-offset-4" target="_blank">View Details</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -53,7 +59,7 @@
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <b>{{r.content_object.company.myprofile.fullname}}</b>
+                    <b>{{r.content_object.name}}</b>
                 </div>
                 <div class="panel-body">
                     <ul class="list-inline">
@@ -63,7 +69,11 @@
                     <p class = "col-md-12">{{r.content_object.description|truncatewords_html:40}}</p>
                 </div>
                 <div class="panel-footer">
-                    <a href="{% url 'mainsite:viewCompany' r.content_object.company.id %}" class="btn btn-outline btn-success col-md-offset-4" target="_blank">View Details</a>
+                    {% if r.content_object.goal.goal == 'Look for Funding' %}
+                    <a href="{% url 'mainsite:viewCompany' 'seek' r.content_object.id %}" class="btn btn-outline btn-success col-md-offset-4" target="_blank">View Details</a>
+                    {% else %}
+                    <a href="{% url 'mainsite:viewCompany' 'sale' r.content_object.id %}" class="btn btn-outline btn-success col-md-offset-4" target="_blank">View Details</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
         "pk": 1,
         "model": "userprofile.UserRole",
         "fields": {
-            "role": "Entrepreneur"
+            "role": "Company"
         }
     },
     {
@@ -18,6 +18,13 @@
         "model": "userprofile.UserRole",
         "fields": {
             "role": "Supporter"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "userprofile.UserRole",
+        "fields": {
+            "role": "Admin"
         }
     }
 ]

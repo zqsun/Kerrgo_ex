@@ -60,8 +60,10 @@ class capitalType(models.Model):
 
 class InvestorProfile(models.Model):
 	investor = models.ForeignKey(User)
+	name = models.CharField(max_length=100,null=True,blank=True)
 	iType = models.ForeignKey(investorType,null=True,blank=True)
 	category = models.ManyToManyField(bizCategory)
+	created_at = models.DateTimeField(auto_now_add=True)
 	description = models.TextField(default=" ",null=True,blank=True)
 	capital = models.ForeignKey(capitalType,null=True,blank=True)
 	preMoney_min = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
@@ -71,6 +73,8 @@ class InvestorProfile(models.Model):
 	revenueStage_max = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	investAmount_min = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	investAmount_max = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
+	country = models.CharField(max_length=100,null=True,blank=True)
+	state = models.CharField(max_length=100,null=True,blank=True)
 	def __unicode__(self):
 		return self.user
 
@@ -113,6 +117,7 @@ class CompanyFile(models.Model):
 
 class CompanyProfile_seekFund(models.Model):
 	company = models.ForeignKey(User)
+	name = models.CharField(max_length=100,null=True,blank=True)
 	category = models.ManyToManyField(bizCategory)
 	created_at = models.DateTimeField(auto_now_add=True)
 	goal = models.ForeignKey(bizGoal,blank=True, null=True) #For company Only
@@ -133,6 +138,8 @@ class CompanyProfile_seekFund(models.Model):
 	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 	phone_number = models.CharField(validators=[phone_regex], blank=True,null=True,max_length=15) # validators should be a list
 	website = models.URLField(blank=True,null=True)
+	country = models.CharField(max_length=100,null=True,blank=True)
+	state = models.CharField(max_length=100,null=True,blank=True)
 	# priorRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	# curRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	# nextRevenue = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
@@ -148,6 +155,7 @@ signals.post_save.connect(create_company,sender=CompanyProfile_seekFund)
 
 class CompanyProfile_sale(models.Model):
 	company = models.ForeignKey(User)
+	name = models.CharField(max_length=100,null=True,blank=True)
 	category = models.ManyToManyField(bizCategory)
 	created_at = models.DateTimeField(auto_now_add=True)
 	goal = models.ForeignKey(bizGoal,blank=True, null=True) #For company Only
@@ -165,6 +173,8 @@ class CompanyProfile_sale(models.Model):
 	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 	phone_number = models.CharField(validators=[phone_regex], blank=True,null=True,max_length=15) # validators should be a list
 	website = models.URLField(blank=True,null=True)
+	country = models.CharField(max_length=100,null=True,blank=True)
+	state = models.CharField(max_length=100,null=True,blank=True)
 
 	# answerChoice = (
 	# 	('Y','Yes'),

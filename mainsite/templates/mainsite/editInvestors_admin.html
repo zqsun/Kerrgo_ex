@@ -1,0 +1,99 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block body %}
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+					{% if tflag != "edit" %}
+					<form role="form" method="post" action="{% url 'mainsite:addInvestors_admin'%}" enctype="multipart/form-data">
+					{% else %}
+					<form role="form" method="post" action="{% url 'mainsite:editInvestors_admin' investor_id %}" enctype="multipart/form-data">
+					{% endif %}
+					<div class="form-group">{% csrf_token %}</div>
+					<div class="form-group">
+						<label>Full Name</label>
+						{% if ip_form.name.errors %}
+							<div class="alert alert-danger" role="alert">
+						    <ul>
+						    {% for error in ip_form.name.errors %}
+						        <li>{{ error|escape }}</li>
+						    {% endfor %}
+						    </ul>
+						    </div>
+						{% endif %}
+						{% render_field ip_form.name class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Role</label>
+						<select class="form-control" disabled="" id="id_role" name="role">
+								<option value="">---------</option>
+								<option value="1">Company</option>
+								<option value="2" selected="selected">Investor</option>
+								<option value="3">Supporter</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Investor Type</label>
+						{% render_field ip_form.iType class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Industry</label>
+						{{ ip_form.category.errors }} 
+						{% render_field ip_form.category %}	
+					</div>
+					<div class="form-group">
+						<label>Contry</label>
+						{% render_field ip_form.country class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>State/ Province</label>
+						{% render_field ip_form.state class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Detailed desription</label>
+						{% render_field ip_form.description class="form-control" %}	
+					</div>
+
+					<div class="form-group">
+						<label>Capital Type</label>
+						{% render_field ip_form.capital class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Minimum Pre-Money Valuation of Interest</label>
+						{% render_field ip_form.preMoney_min class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Maximum Pre-Money Valuation of Interest</label>
+						{% render_field ip_form.preMoney_max class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Expected Rate of Return per Year(%)</label>
+						{% render_field ip_form.expectedReturn class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Minimum Revenue Stage of Interest</label>
+						{% render_field ip_form.revenueStage_min class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Maximum Revenue Stage of Interest</label>
+						{% render_field ip_form.revenueStage_max class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Minimum Investment Range of Interest</label>
+						{% render_field ip_form.investAmount_min class="form-control" %}	
+					</div>
+					<div class="form-group">
+						<label>Maximum Investment Range of Interest</label>
+						{% render_field ip_form.investAmount_max class="form-control" %}	
+					</div>
+					<input type="submit" class="btn btn-lg btn-success btn-block" value="Submit" />
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

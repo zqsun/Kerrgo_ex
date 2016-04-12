@@ -19,6 +19,8 @@ def dashboard(request):
 	p = request.user.myprofile
 	if p.role == UserRole.objects.get(pk=2):
 		return HttpResponseRedirect(reverse('mainsite:dashboard_investor'))
+	if p.role == UserRole.objects.get(pk=4):
+		return HttpResponseRedirect(reverse('mainsite:dashboard_admin'))
 	#activeInvestor = Profile.objects.filter(isProfilecreated=True).filter(role=2,).order_by('-created_at').all()[:12]
 	activeInvestor = Profile.objects.filter(role=2,).order_by('-created_at').all()[:12]
 	context = {'activeInvestor':activeInvestor}
@@ -29,7 +31,10 @@ def dashboard_investor(request):
 	p = request.user.myprofile
 	if p.role == UserRole.objects.get(pk=1):
 		return HttpResponseRedirect(reverse('mainsite:dashboard'))
-	interestCompany = Profile.objects.filter(role=1,).order_by('-created_at').all()[:12]
+	if p.role == UserRole.objects.get(pk=4):
+		return HttpResponseRedirect(reverse('mainsite:dashboard_admin'))
+	interestCompany = CompanyProfile.objects.all().order_by('-created_at').all()[:12]
+	# interestCompany = Profile.objects.filter(role=1,).order_by('-created_at').all()[:12]
 	# if p.category.all().count() == 0:
 	# 	interestCompany = Profile.objects.filter(role=1,).order_by('-created_at').all()[:12]
 	# else:
@@ -38,6 +43,132 @@ def dashboard_investor(request):
 	# 		interestCompany = Profile.objects.filter(role=1,).order_by('-created_at').all()[:12]
 	context = {'interestCompany':interestCompany}
 	return render(request,'mainsite/dashboard_investor.html',context)
+
+@login_required
+def dashboard_admin(request):
+	p = request.user.myprofile
+	investors = InvestorProfile.objects.filter(investor=request.user)
+	companySale = CompanyProfile_sale.objects.filter(company=request.user)
+	companySeek = CompanyProfile_seekFund.objects.filter(company=request.user)
+	context = {'investors':investors, 'companySale':companySale,'companySeek':companySeek}
+	return render(request,'mainsite/dashboard_admin.html',context)
+
+@login_required
+def editInvestors_admin(request,investor_id):
+	p = request.user.myprofile
+	if p.role == UserRole.objects.get(pk=1):
+		return HttpResponseRedirect(reverse('mainsite:editProfile_company'))
+	ip = InvestorProfile.objects.get(pk=investor_id)
+	if request.method == 'POST':
+		ip_form = InvestorForm(request.POST, instance=ip)
+		if ip_form.is_valid():
+			new_ip = ip_form.save(commit=False)
+			new_ip.investor = request.user
+			new_ip.save()
+			ip_form.save_m2m()
+			messages.success(request, "Investor's profile is successfullly updated.")
+			#ip_form.save_m2m()
+		return HttpResponseRedirect(reverse('mainsite:dashboard_admin'))
+	else:
+		ip_form =  InvestorForm(instance=ip)
+	context = {'ip_form':ip_form,'tflag':"edit",'investor_id':investor_id}
+	return render(request,'mainsite/editInvestors_admin.html',context)
+
+@login_required
+def addInvestors_admin(request):
+	p = request.user.myprofile
+	if p.role == UserRole.objects.get(pk=1):
+		return HttpResponseRedirect(reverse('mainsite:editProfile_company'))
+	# ip = InvestorProfile.objects.get(pk=investor_id)
+	if request.method == 'POST':
+		ip_form = InvestorForm(request.POST)
+		if ip_form.is_valid():
+			new_ip = ip_form.save(commit=False)
+			new_ip.investor = request.user
+			new_ip.save()
+			ip_form.save_m2m()
+			messages.success(request, "Investor's profile is successfullly updated.")
+			#ip_form.save_m2m()
+		return HttpResponseRedirect(reverse('mainsite:dashboard_investor'))
+	else:
+		ip_form =  InvestorForm()
+	context = {'ip_form':ip_form}
+	return render(request,'mainsite/editInvestors_admin.html',context)
+
+@login_required
+def  addCompany_admin(request,goal):
+	p = request.user.myprofile
+	if p.role == UserRole.objects.get(pk=2):
+		return HttpResponseRedirect(reverse('mainsite:editProfile_investor'))
+	
+	if goal == "seek":
+		ftag = 1
+	else:
+		# cp, created = CompanyProfile_sale.objects.get_or_create(company=request.user)
+		ftag = 2
+	#filesFormSet = formset_factory()
+	#cp.name = p.fullname
+	if request.method == 'POST':
+		if ftag == 1:
+			cp_form = cpSeekFundForm(request.POST)
+		else:
+			cp_form = cpSaleForm(request.POST)
+			#profile_form.save_m2m()
+		if cp_form.is_valid():
+			companyprofile = cp_form.save(commit=False)
+			companyprofile.goal = bizGoal.objects.get(pk=ftag)
+			companyprofile.company = request.user
+			companyprofile.save()
+			cp_form.save_m2m()
+			messages.success(request, 'Your profile is successfullly updated.')
+		return HttpResponseRedirect(reverse('mainsite:dashboard_admin'))
+		#return HttpResponseRedirect(reverse('mainsite:editProfile_company')) 
+	else:
+		if ftag == 1:
+			cp_form = cpSeekFundForm()
+		else:
+			cp_form = cpSaleForm()
+	isAdd = True
+	context = {'cp_form':cp_form,'ftag':ftag,'isAdd':isAdd}
+	return render(request,'mainsite/editcompany_admin.html',context)
+
+@login_required
+def editCompany_admin(request,goal,company_id):
+	p = request.user.myprofile
+	if p.role == UserRole.objects.get(pk=2):
+		return HttpResponseRedirect(reverse('mainsite:editProfile_investor'))
+	if goal == 'seek':
+		cp = CompanyProfile_seekFund.objects.get(pk=company_id)
+		ftag = 1
+	else:
+		cp = CompanyProfile_sale.objects.get(pk=company_id)
+		ftag = 2
+	print ftag
+	if request.method == 'POST':
+		if ftag == 1:
+			cp_form = cpSeekFundForm(request.POST)
+		else:
+			cp_form = cpSaleForm(request.POST)	
+		if cp_form.is_valid():
+			companyprofile = cp_form.save(commit=False)
+			companyprofile.goal = bizGoal.objects.get(pk=ftag)
+			companyprofile.company = request.user
+			companyprofile.save()
+			cp_form.save_m2m()
+			# gcp = CompanyProfile(content_object=companyprofile,created_at=companyprofile.created_at)
+			# gcp.save()
+			messages.success(request, 'Your profile is successfullly updated.')
+		return HttpResponseRedirect(reverse('mainsite:dashboard_admin')) 
+	else:
+		if ftag == 1:
+			cp_form = cpSeekFundForm(instance=cp)
+		else:
+			cp_form = cpSaleForm(instance=cp)
+	isAdd = False
+	context = {'cp_form':cp_form,'ftag':ftag,'isAdd':isAdd,'company_id':company_id}
+	return render(request,'mainsite/editcompany_admin.html',context)
+
+
 @login_required
 def goalChoose(request):
 	p = request.user.myprofile
@@ -95,6 +226,7 @@ def editProfile_company(request):
 		cp, created = CompanyProfile_sale.objects.get_or_create(company=request.user)
 		ftag = 2
 	#filesFormSet = formset_factory()
+	cp.name = p.fullname
 	if request.method == 'POST':
 		profile_form = ProfileForm(request.POST, instance=p)
 		#fileform = FileForm(request.POST,request.FILE)
@@ -107,14 +239,20 @@ def editProfile_company(request):
 			profile = profile_form.save(commit=False)
 			profile.isProfilecreated = True
 			profile.save()
+			p = profile
 			#profile_form.save_m2m()
 			messages.success(request, 'Your profile is successfullly updated.')
 		if cp_form.is_valid():
 			companyprofile = cp_form.save(commit=False)
-			companyprofile.goal = profile.goal
+			companyprofile.goal = p.goal
 			companyprofile.created_at = p.created_at
+			companyprofile.name = p.fullname
+			companyprofile.country = p.country
+			companyprofile.state = p.state
 			companyprofile.save()
 			cp_form.save_m2m()
+			# gcp = CompanyProfile(content_object=companyprofile,created_at=companyprofile.created_at)
+			# gcp.save()
 		# if fileform.is_valid():
 		# 	file = fileform.save(commit=False)
 		# 	file.content_object = cp
@@ -150,12 +288,16 @@ def editProfile_investor(request):
 			profile = profile_form.save(commit=False)
 			profile.isProfilecreated = True
 			profile.save()
+			p = profile
 			#profile_form.save_m2m()
 			messages.success(request, 'Your profile is successfullly updated.')
 		if ip_form.is_valid():
-			new_ip = ip_form.save()
+			new_ip = ip_form.save(commit=False)
+			new_ip.name = p.fullname
+			new_ip.country = p.country
+			new_ip.state = p.state
 			new_ip.save()
-			#ip_form.save_m2m()
+			ip_form.save_m2m()
 		return HttpResponseRedirect(reverse('mainsite:dashboard_investor'))
 	else:
 		profile_form = ProfileForm(instance=p)
@@ -164,15 +306,15 @@ def editProfile_investor(request):
 	return render(request,'mainsite/editProfile_investor.html',context)
 
 @login_required
-def viewCompany(request,user_id):
-	p = Profile.objects.get(user=user_id)
-	if p.goal == bizGoal.objects.get(pk=1):
-		cp = CompanyProfile_seekFund.objects.get(company=user_id)
+def viewCompany(request,goal,company_id):
+	#p = Profile.objects.get(user=user_id)
+	if goal == 'seek':
+		cp = CompanyProfile_seekFund.objects.get(pk=company_id)
 		ftag = 1
 	else:
-		cp = CompanyProfile_sale.objects.get(company=user_id)
+		cp = CompanyProfile_sale.objects.get(pk=company_id)
 		ftag = 2
-	context = {'profile':p,'cp':cp,'ftag':ftag}
+	context = {'cp':cp,'ftag':ftag}
 	return render(request,'mainsite/viewmyprofile_company.html',context)
 
 @login_required
@@ -184,9 +326,9 @@ def viewInvestor(request,user_id):
 
 def browseInvestor(request,type_name):
     if type_name == "ALL":
-        results = InvestorProfile.objects.all()
+        results = InvestorProfile.objects.all().order_by('-created_at')
     else:
-        results = InvestorProfile.objects.filter(iType__iType__contains=type_name)
+        results = InvestorProfile.objects.filter(iType__iType__contains=type_name).order_by('-created_at')
     #company_form = CompanySearchForm()
     context = {'results':results,'type':type_name}
     return render(request, 'mainsite/browseInvestor.html', context)
