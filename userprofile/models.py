@@ -1,12 +1,15 @@
 from __future__ import unicode_literals
 
+import os
+from uuid import uuid4
+
 from django.db import models
 from django.db.models import signals
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.core.validators import RegexValidator
-from uuid import uuid4
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -195,7 +198,19 @@ class CompanyFile_seek(models.Model):
 	# caption = models.CharField(max_length=100,null=True,default='Company Document',blank=True)
 	companyprofile = models.ForeignKey(CompanyProfile_seekFund)
 	file = models.FileField(upload_to=user_diretory_path,null=True,blank=True)
-	
+
+@receiver(models.signals.post_delete)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """Deletes file from filesystem
+    when corresponding `MediaFile` object is deleted.
+    """
+    list_of_models = ('CompanyFile_sale','CompanyFile_seek')
+    if sender.__name__ in list_of_models:
+		if instance.file:
+			if os.path.isfile(instance.file.path):
+				dirname = os.path.dirname(instance.file.path)
+				os.remove(instance.file.path)
+				os.rmdir(dirname)
 
 
 
