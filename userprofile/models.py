@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.core.validators import RegexValidator
+from uuid import uuid4
 
 # Create your models here.
 
@@ -93,16 +94,6 @@ def create_company(sender,instance,created, **kwargs):
  	company.created_at = instance.created_at
  	company.save()
 
-def user_diretory_path(instance,filename):
-	return 'user_{0}/{1}'.format(instance.user.id,filename)
-
-class CompanyFile(models.Model):
-	# caption = models.CharField(max_length=100,null=True,default='Company Document',blank=True)
-	file = models.FileField(upload_to=user_diretory_path,null=True,blank=True)
-	content_type = models.ForeignKey(ContentType)
-	object_id = models.PositiveIntegerField()
-	content_object = GenericForeignKey('content_type','content_object')
-
 # class companyType(models.Model):
 # 	cType = models.CharField(max_length=250,unique=True)
 # 	# desc_chs = models.CharField(max_length=250)
@@ -131,7 +122,7 @@ class CompanyProfile_seekFund(models.Model):
 	curNet = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
 	yearEstablished = models.IntegerField(default=0,null=True,blank=True)
 	employees = models.IntegerField(default=0,null=True,blank=True)
-	files = GenericRelation(CompanyFile)
+	# files = GenericRelation(CompanyFile)
 	# Contact
 	contactName = models.CharField(max_length=100,default=" ",null=True,blank=True)
 	contactEmail = models.EmailField(max_length=254,default=" ",null=True,blank=True)
@@ -166,7 +157,7 @@ class CompanyProfile_sale(models.Model):
 	yearEstablished = models.IntegerField(default=0,null=True,blank=True)
 	employees = models.IntegerField(default=0,null=True,blank=True)
 	price = models.DecimalField(max_digits=11,decimal_places=2,default=0,null=True,blank=True)
-	files = GenericRelation(CompanyFile)
+	# files = GenericRelation(CompanyFile)
 	# Contact
 	contactName = models.CharField(max_length=100,default=" ",null=True,blank=True)
 	contactEmail = models.EmailField(max_length=254,default=" ",null=True,blank=True)
@@ -189,7 +180,22 @@ class CompanyProfile_sale(models.Model):
 	# realEstateInclude = models.CharField(max_length=2,choices=answerChoice,default='Y')
 signals.post_save.connect(create_company,sender=CompanyProfile_sale)
 
+def user_diretory_path(instance,filename):
+	return 'user_{0}/{1}/{2}'.format(instance.companyprofile.id,uuid4().hex,filename)
 
+class CompanyFile_sale(models.Model):
+	# caption = models.CharField(max_length=100,null=True,default='Company Document',blank=True)
+	companyprofile = models.ForeignKey(CompanyProfile_sale)
+	file = models.FileField(upload_to=user_diretory_path,null=True,blank=True)
+	
+	# object_id = models.PositiveIntegerField()
+	# content_object = GenericForeignKey('content_type','content_object')
+
+class CompanyFile_seek(models.Model):
+	# caption = models.CharField(max_length=100,null=True,default='Company Document',blank=True)
+	companyprofile = models.ForeignKey(CompanyProfile_seekFund)
+	file = models.FileField(upload_to=user_diretory_path,null=True,blank=True)
+	
 
 
 

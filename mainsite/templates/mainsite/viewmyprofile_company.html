@@ -1,6 +1,7 @@
 {% extends "site_base.html" %}
 {% load i18n %}
 {% load widget_tweaks %}
+{% load filename %}
 {% block body %}
 {% if ftag == 1 %}
 <div class="col-md-8">
@@ -99,6 +100,16 @@
 </div>
 {% endif %}
 <div class="col-md-4">
+	{% if documents %}
+	<div class="panel panel-default">
+		<div class="panel-heading">Contact</div>
+		<div class="panel-body">
+			{% for d in documents %}
+			<li><a href="{{ d.file.url }}">{{ d.file|filename}}</a></li>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
 	<div class="panel panel-default">
 		<div class="panel-heading">Contact</div>
 		<div class="panel-body">

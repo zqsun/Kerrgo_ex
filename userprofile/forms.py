@@ -38,8 +38,4 @@ class cpSaleForm(forms.ModelForm):
 		model = CompanyProfile_sale
 		fields = ['category','name','description','revenue','sales','profit','yearEstablished','employees','price','contactName','contactEmail','phone_number','website','country','state']
 
-class FileForm(forms.ModelForm):
-	class Meta:
-		model = CompanyFile
-		fields = ['file']
 			

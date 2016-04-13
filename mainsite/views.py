@@ -1,8 +1,10 @@
+import os
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.forms import formset_factory
+from django.shortcuts import get_object_or_404
 
 from django.contrib.contenttypes.models import ContentType
 
@@ -10,7 +12,7 @@ from haystack.generic_views import SearchView
 from haystack.query import SearchQuerySet,EmptySearchQuerySet
 
 from userprofile.models import *
-from userprofile.forms import ProfileForm,InvestorForm,cpSeekFundForm, cpSaleForm,GoalForm,FileForm
+from userprofile.forms import ProfileForm,InvestorForm,cpSeekFundForm, cpSaleForm,GoalForm
 from mainsite.forms import CompanySearchForm
 
 # Create your views here.
@@ -120,6 +122,14 @@ def  addCompany_admin(request,goal):
 			companyprofile.company = request.user
 			companyprofile.save()
 			cp_form.save_m2m()
+			for afile in request.FILES.getlist('documents'):
+				if ftag == 1:
+					cf = CompanyFile_seek()
+				else:
+					cf = CompanyFile_sale()
+				cf.companyprofile = companyprofile
+				cf.file = afile
+				cf.save()
 			messages.success(request, 'Your profile is successfullly updated.')
 		return HttpResponseRedirect(reverse('mainsite:dashboard_admin'))
 		#return HttpResponseRedirect(reverse('mainsite:editProfile_company')) 
@@ -146,15 +156,23 @@ def editCompany_admin(request,goal,company_id):
 	print ftag
 	if request.method == 'POST':
 		if ftag == 1:
-			cp_form = cpSeekFundForm(request.POST)
+			cp_form = cpSeekFundForm(request.POST,instance=cp)
 		else:
-			cp_form = cpSaleForm(request.POST)	
+			cp_form = cpSaleForm(request.POST,instance=cp)	
 		if cp_form.is_valid():
 			companyprofile = cp_form.save(commit=False)
 			companyprofile.goal = bizGoal.objects.get(pk=ftag)
 			companyprofile.company = request.user
 			companyprofile.save()
 			cp_form.save_m2m()
+			for afile in request.FILES.getlist('documents'):
+				if ftag == 1:
+					cf = CompanyFile_seek()
+				else:
+					cf = CompanyFile_sale()
+				cf.companyprofile = companyprofile
+				cf.file = afile
+				cf.save()
 			# gcp = CompanyProfile(content_object=companyprofile,created_at=companyprofile.created_at)
 			# gcp.save()
 			messages.success(request, 'Your profile is successfullly updated.')
@@ -162,10 +180,12 @@ def editCompany_admin(request,goal,company_id):
 	else:
 		if ftag == 1:
 			cp_form = cpSeekFundForm(instance=cp)
+			documents = CompanyFile_seek.objects.filter(companyprofile=cp)
 		else:
 			cp_form = cpSaleForm(instance=cp)
+			documents = CompanyFile_sale.objects.filter(companyprofile=cp)
 	isAdd = False
-	context = {'cp_form':cp_form,'ftag':ftag,'isAdd':isAdd,'company_id':company_id}
+	context = {'cp_form':cp_form,'ftag':ftag,'isAdd':isAdd,'company_id':company_id,'documents':documents}
 	return render(request,'mainsite/editcompany_admin.html',context)
 
 
@@ -193,11 +213,13 @@ def viewMyprofile_company(request):
 		return HttpResponseRedirect('/goal/')
 	if p.goal == bizGoal.objects.get(pk=1):
 		cp, created = CompanyProfile_seekFund.objects.get_or_create(company=request.user)
+		documents = CompanyFile_seek.objects.filter(companyprofile=cp)
 		ftag = 1
 	else:
 		cp, created = CompanyProfile_sale.objects.get_or_create(company=request.user)
+		documents = CompanyFile_sale.objects.filter(companyprofile=cp)
 		ftag = 2
-	context = {'profile':p,'cp':cp,'ftag':ftag}
+	context = {'profile':p,'cp':cp,'ftag':ftag,'documents':documents}
 	return render(request,'mainsite/viewmyprofile_company.html',context)
 
 @login_required
@@ -251,28 +273,25 @@ def editProfile_company(request):
 			companyprofile.state = p.state
 			companyprofile.save()
 			cp_form.save_m2m()
-			# gcp = CompanyProfile(content_object=companyprofile,created_at=companyprofile.created_at)
-			# gcp.save()
-		# if fileform.is_valid():
-		# 	file = fileform.save(commit=False)
-		# 	file.content_object = cp
-		# 	file.save()
-		# if ffs.is_valid():
-		# 	for fileform in ffs:
-		# 		file = fileform.save()
-		# 		file.save()
+			for afile in request.FILES.getlist('documents'):
+				if ftag == 1:
+					cf = CompanyFile_seek()
+				else:
+					cf = CompanyFile_sale()
+				cf.companyprofile = companyprofile
+				cf.file = afile
+				cf.save()
 		return HttpResponseRedirect(reverse('mainsite:dashboard'))
 		#return HttpResponseRedirect(reverse('mainsite:editProfile_company')) 
 	else:
 		profile_form = ProfileForm(instance=p)
 		if ftag == 1:
 			cp_form = cpSeekFundForm(instance=cp)
+			documents = CompanyFile_seek.objects.filter(companyprofile=cp)
 		else:
 			cp_form = cpSaleForm(instance=cp)
-		content_type = ContentType.objects.get_for_model(cp)
-		fqs = CompanyFile.objects.filter(content_type=content_type,object_id=cp.id)
-		#ffs = filesFormSet(queryset = fqs)
-	context = {'profile_form':profile_form,'cp_form':cp_form,'ftag':ftag}
+			documents = CompanyFile_sale.objects.filter(companyprofile=cp)
+	context = {'profile_form':profile_form,'cp_form':cp_form,'ftag':ftag,'documents':documents}
 	return render(request,'mainsite/editprofile_company.html',context)
 
 @login_required
@@ -310,11 +329,13 @@ def viewCompany(request,goal,company_id):
 	#p = Profile.objects.get(user=user_id)
 	if goal == 'seek':
 		cp = CompanyProfile_seekFund.objects.get(pk=company_id)
+		documents = CompanyFile_seek.objects.filter(companyprofile=cp)
 		ftag = 1
 	else:
 		cp = CompanyProfile_sale.objects.get(pk=company_id)
+		documents = CompanyFile_sale.objects.filter(companyprofile=cp)
 		ftag = 2
-	context = {'cp':cp,'ftag':ftag}
+	context = {'cp':cp,'ftag':ftag,'documents':documents}
 	return render(request,'mainsite/viewmyprofile_company.html',context)
 
 @login_required
@@ -399,4 +420,19 @@ def my_basic_search(request, template='search/search.html', load_all=True, form_
         context.update(extra_context)
 
     return render(request, template, context)
+
+@login_required
+def deleteFile(request,goal,fid):
+	if goal == "seek":
+		cf = get_object_or_404(CompanyFile_seek,pk=fid)
+	else:
+		cf = get_object_or_404(CompanyFile_sale,pk=fid)
+	name = os.path.basename(cf.file.name)
+	cf.delete()
+	q = request.GET.get('q', '')
+	messages.success(request, '%s is successfullly deleted.' % name)
+	return HttpResponseRedirect(q)
+
+
+
 

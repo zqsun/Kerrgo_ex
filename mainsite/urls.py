@@ -22,4 +22,5 @@ urlpatterns = [
 	url(r'^viewmyprofile/?$', views.viewMyprofile_company, name="viewmyProfile_company"),
 	url(r'^viewmyprofile_investor/?$', views.viewMyprofile_investor, name="viewmyProfile_investor"),
 	url(r'^goal/?$', views.goalChoose, name="goalChoose"),
+	url(r'^deletefile/(?P<goal>[\w|\W]+)/(?P<fid>[0-9]+)/$', views.deleteFile, name="deleteFile"),
 ]

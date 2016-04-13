@@ -1,6 +1,7 @@
 {% extends "site_base.html" %}
 {% load i18n %}
 {% load widget_tweaks %}
+{% load filename %}
 
 {% block body %}
 <div class="row">
@@ -113,6 +114,26 @@
 						<label>Website</label>
 						{% render_field cp_form.website class="form-control" %}	
 					</div>
+					<div class="form-group">
+						<label>Add Documents</label>
+						<input type="file" name="documents">
+						<input type="file" name="documents">
+						<input type="file" name="documents">
+					</div>
+					{% if documents %}
+					<div class="form-group">
+						<label>Current Documents on Record</label>
+						{% for d in documents %}
+						<li><a href="{{ d.file.url }}">{{ d.file|filename}}</a>&nbsp;&nbsp;&nbsp;
+						{% if ftag == 1 %}
+						<a href="{% url 'mainsite:deleteFile' 'seek' d.pk %}?q={{ request.build_absolute_uri }}" class="text-danger">Delete</a>
+						{% else %}
+						<a href="{% url 'mainsite:deleteFile' 'sale' d.pk %}?q={{ request.build_absolute_uri }}" class="text-danger">Delete</a>
+						{% endif %}
+						</li>
+						{% endfor %}
+					</div>
+					{% endif %}
 					<!-- <input type="file" name="myfiles" multiple> -->
 					<input type="submit" class="btn btn-lg btn-success btn-block" value="Submit" />
 				</form>
