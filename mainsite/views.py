@@ -49,6 +49,10 @@ def dashboard_investor(request):
 @login_required
 def dashboard_admin(request):
 	p = request.user.myprofile
+	if p.role == UserRole.objects.get(pk=2):
+		return HttpResponseRedirect(reverse('mainsite:dashboard_investor'))
+	if p.role == UserRole.objects.get(pk=1):
+		return HttpResponseRedirect(reverse('mainsite:dashboard'))
 	investors = InvestorProfile.objects.filter(investor=request.user)
 	companySale = CompanyProfile_sale.objects.filter(company=request.user)
 	companySeek = CompanyProfile_seekFund.objects.filter(company=request.user)
