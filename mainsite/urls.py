@@ -1,6 +1,7 @@
 from django.conf.urls import include,url
 # from . import views
 from . import views
+from django.views.generic import TemplateView
 
 urlpatterns = [
 	#url(r'^search/?$', views.MySearchView.as_view(), name='mysearch'),
@@ -23,4 +24,5 @@ urlpatterns = [
 	url(r'^viewmyprofile_investor/?$', views.viewMyprofile_investor, name="viewmyProfile_investor"),
 	url(r'^goal/?$', views.goalChoose, name="goalChoose"),
 	url(r'^deletefile/(?P<goal>[\w|\W]+)/(?P<fid>[0-9]+)/$', views.deleteFile, name="deleteFile"),
+	url(r'^google22cffa4b9737b2ae.html',TemplateView.as_view(template_name='mainsite/google22cffa4b9737b2ae.html'),)
 ]
